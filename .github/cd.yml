@@ -1,0 +1,15 @@
+name: CD
+on:
+  push:
+    branches:
+      - main
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Build and push Docker image (Backend)
+        run: |
+          cd backend
+          docker build -t INF124 .
+          # Add ECR login, tagging and pushing commands here
