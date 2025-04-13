@@ -15,10 +15,13 @@ const io = new SocketIOServer(server, {
 app.use(cors());
 app.use(express.json());
 
-// Route Handler (make sure syntax matches exactly)
 app.get('/health', (req: Request, res: Response) => {
   res.status(200).json({ status: 'OK' });
 });
+
+
+
+
 
 // Socket.IO connection
 io.on('connection', (socket) => {
