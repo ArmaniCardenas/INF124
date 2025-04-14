@@ -1,15 +1,11 @@
 import { useState } from 'react'
+import reactLogo from './assets/react.svg'
+import viteLogo from '/vite.svg'
 
-import './App.css'
-
-function App() {
-  const [count, setCount] = useState(0)
-
+export default function App() {
   return (
-    <>
-      <div className='max-w-3xl space-y-4'>yo</div>
-    </>
-  )
+      <h1 className="text-emerald-500">
+        Tailwind is Working ✅
+      </h1>
+  );
 }
-
-export default App
