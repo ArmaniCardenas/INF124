@@ -1,11 +1,30 @@
 import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
+import { Routes, Route, Link } from 'react-router-dom';
+import TestPage from './app/page';
+import { Button } from './components/ui/button';
 
-export default function App() {
+function App() {
   return (
-      <h1 className="text-emerald-500">
-        Tailwind is Working ✅
-      </h1>
+    <div>
+      <nav>
+        <ul>
+          <li>
+            <Link to="/">Home</Link>
+          </li>
+          <li>
+            <Link to="/about">About</Link>
+          </li>
+          <li>
+            <Link to="/contact">Contact</Link>
+          </li>
+        </ul>
+      </nav>
+
+      <Routes>
+        <Route path="/about" element={<TestPage />} />
+      </Routes>
+    </div>
   );
 }
+
+export default App;
