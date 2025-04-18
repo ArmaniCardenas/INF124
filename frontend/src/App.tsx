@@ -1,29 +1,24 @@
 import { useState } from 'react'
-import { Routes, Route, Link } from 'react-router-dom';
-import TestPage from './app/page';
+import { Routes, Route, Navigate } from 'react-router';
+
+import { Heading } from './pages/app/page';
+import { LandingPage } from './pages/app/LandingPage';
+import RegisterPage from './pages/app/Login';
 import { Button } from './components/ui/button';
+import './index.css';
+
 
 function App() {
   return (
-    <div>
-      <nav>
-        <ul>
-          <li>
-            <Link to="/">Home</Link>
-          </li>
-          <li>
-            <Link to="/about">About</Link>
-          </li>
-          <li>
-            <Link to="/contact">Contact</Link>
-          </li>
-        </ul>
-      </nav>
+      <>
+
+  
 
       <Routes>
-        <Route path="/about" element={<TestPage />} />
+        <Route path="/Login" element={<RegisterPage />} />
+        <Route path="/" element={<LandingPage />} />
       </Routes>
-    </div>
+      </>
   );
 }
 
