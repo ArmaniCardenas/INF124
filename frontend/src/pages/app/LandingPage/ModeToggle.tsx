@@ -1,13 +1,13 @@
 import React from "react";
 import { useEffect, useState } from "react";
 import { Sun, Moon } from "lucide-react";
-import { Button } from "../../components/ui/button";
+import { Button } from "../../../components/ui/button";
 import { 
     DropdownMenu, 
     DropdownMenuTrigger,
     DropdownMenuContent,
     DropdownMenuItem
-} from "../../components/ui/dropdown-menu";
+} from "../../../components/ui/dropdown-menu";
 import { useTheme } from "./ThemeProvider";
 
 

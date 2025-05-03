@@ -1,6 +1,6 @@
 // src/layout/MarketingLayout.tsx
 import React from "react";
-import Navbar from "./Navbar";
+import Navbar from "./LandingPage/Navbar";
 interface Props { children: React.ReactNode }
 
 export default function MarketingLayout({ children }: Props) {

@@ -13,7 +13,8 @@ export const Heroes = () => {
             <div className=" flex items-center">
                 <div className="relative w-[300px] h-[300px] sm:w-[350px]
                 sm:h-[350px] md:h-[400px] md:w-[400px]">
-                    <img alt="documents" className="object-contain" src="/documents.png"/>  
+                    <img alt="documents" className="object-contain hidden dark:block" src="/documents-dark.png"/> 
+                    <img alt="documents" className="object-contain dark:hidden" src="/documents.png"/>  
                 </div>
             </div>
 
@@ -21,7 +22,8 @@ export const Heroes = () => {
             sm:w-[350px] sm:h-[350px]
             md:w-[400px] md:h-[400px]">
 
-                <img alt="reading" className="object-contain" src="/reading.png"/>
+                <img alt="reading" className="object-contain dark:hidden" src="/reading.png"/>
+                <img alt="reading" className="object-contain hidden dark:block" src="/reading-dark.png"/>
                  
             </div>
 

@@ -1,9 +1,9 @@
 "use client";
-import { Button } from "../../components/ui/button";
+import { Button } from "../../../components/ui/button";
 import { ChevronRight } from "lucide-react"
 
  
-
+ 
 
 export const Heading = () => {
     return(

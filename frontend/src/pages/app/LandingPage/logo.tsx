@@ -2,7 +2,7 @@ import LotionIcon from './frontend/public/LotionIcon.png'
 
 
 
-import { cn } from '../../lib/utils'
+import { cn } from '../../../lib/utils'
 
 export const Logo = () => {
     return (

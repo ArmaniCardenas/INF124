@@ -1,6 +1,6 @@
 const RegisterPage = () => {
     return (
-        <div>
+        <div className="text-black">
             Login
         </div>
 
