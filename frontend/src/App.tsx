@@ -18,10 +18,7 @@ import ProtectedRoute from './components/auth/ProtectedRoute';
 
 function App() {
   return (
-      <>
-
-  
-
+    <>
       <Routes>
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
@@ -41,12 +38,24 @@ function App() {
             </ProtectedRoute>
           }
         />        
-
-<Route path="/" element={<MarketingLayout><LandingPage /></MarketingLayout>  } />
-<Route path="/Main" element={ <MainLayout>
-  <DocumentsPage /></MainLayout>} />
-</Routes>
-      </>
+        <Route 
+          path="/" 
+          element={
+            <MarketingLayout>
+              <LandingPage />
+            </MarketingLayout>  
+          } 
+        />
+        <Route 
+          path="/Main"
+          element={ 
+            <MainLayout>
+              <DocumentsPage />
+            </MainLayout>
+          }
+        />
+      </Routes>
+    </>
   );
 } //
 

@@ -21,7 +21,6 @@ createRoot(document.getElementById("root")!).render(
             <App />
           </ThemeProvider>
         </CookiesProvider>
-
       </BrowserRouter>
     </QueryClientProvider>
   </React.StrictMode>
