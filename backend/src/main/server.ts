@@ -6,22 +6,8 @@ import dotenv from 'dotenv';
 import authRoutes from '../infrastructure/controllers/authController';
 import mongoose from 'mongoose';
 import cookieParser from 'cookie-parser';
-import authRoutes from '../infrastructure/controllers/authController';
-import mongoose from 'mongoose';
-import cookieParser from 'cookie-parser';
 
 dotenv.config();
-const { MONGO_URL, PORT } = process.env;
-
-if (!MONGO_URL) {
-  throw new Error('Missing MONGO_URL in environment');
-}
-console.log("URL here: ", MONGO_URL);
-mongoose
-  .connect(MONGO_URL)
-  .then(() => console.log("MongoDB is  connected successfully"))
-  .catch((err) => console.error(err));
-
 const { MONGO_URL, PORT } = process.env;
 
 if (!MONGO_URL) {
