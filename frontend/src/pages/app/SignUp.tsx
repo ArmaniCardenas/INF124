@@ -3,13 +3,14 @@ import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
 
-const Login = () => {
+const Signup = () => {
   const navigate = useNavigate();
   const [inputValue, setInputValue] = useState({
     email: "",
     password: "",
+    username: "",
   });
-  const { email, password } = inputValue;
+  const { email, password, username } = inputValue;
   const handleOnChange = (e) => {
     const { name, value } = e.target;
     setInputValue({
@@ -24,20 +25,19 @@ const Login = () => {
     });
   const handleSuccess = (msg) =>
     toast.success(msg, {
-      position: "bottom-left",
+      position: "bottom-right",
     });
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
       const { data } = await axios.post(
-        "http://localhost:4000/signin",
+        "http://localhost:4000/signup",
         {
           ...inputValue,
         },
         { withCredentials: true }
       );
-      console.log(data);
       const { success, message } = data;
       if (success) {
         handleSuccess(message);
@@ -54,6 +54,7 @@ const Login = () => {
       ...inputValue,
       email: "",
       password: "",
+      username: "",
     });
   };
 
@@ -61,7 +62,7 @@ const Login = () => {
     <div className="min-h-screen flex items-center justify-center bg-gray-100 dark:bg-gray-900">
       <div className="w-full max-w-md bg-white dark:bg-gray-800 p-8 rounded-2xl shadow-md">
         <h2 className="text-2xl font-bold mb-6 text-center text-gray-800 dark:text-white">
-          Login to Your Account
+          Create a New Account
         </h2>
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
@@ -73,6 +74,20 @@ const Login = () => {
               name="email"
               value={email}
               placeholder="Enter your email"
+              onChange={handleOnChange}
+              className="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-700 bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+              required
+            />
+          </div>
+          <div>
+            <label htmlFor="username" className="block mb-1 text-sm font-medium text-gray-700 dark:text-gray-300">
+              Username
+            </label>
+            <input
+              type="text"
+              name="username"
+              value={username}
+              placeholder="Enter your username"
               onChange={handleOnChange}
               className="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-700 bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
               required
@@ -99,9 +114,9 @@ const Login = () => {
             Submit
           </button>
           <p className="text-sm text-center text-gray-600 dark:text-gray-400">
-            Don't have an account?{" "}
-            <Link to="/signup" className="text-blue-600 hover:underline">
-              Signup
+            Already have an account?{" "}
+            <Link to="/login" className="text-blue-600 hover:underline">
+              Login
             </Link>
           </p>
         </form>
@@ -111,4 +126,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default Signup;
