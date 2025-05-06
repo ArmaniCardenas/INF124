@@ -4,11 +4,13 @@ import { Signup } from '../../application/use-cases/auth/SignUp';
 import { Signin } from '../../application/use-cases/auth/SignIn';
 import { MongoUserRepository } from '../repositories/MongoUserRepository';
 import { userVerification } from '../middleware/AuthMiddleware';
+import { Logout } from '../../application/use-cases/auth/Logout';
 
 const router = Router();
 router.post("/signup", Signup);
 router.post("/signin", Signin);
-router.post("/", userVerification);
+router.post("/verify-token", userVerification);
+router.post("/logout", Logout);
 
 // const userRepo = new MongoUserRepository();
 

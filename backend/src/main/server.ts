@@ -46,14 +46,14 @@ server.listen(PORT, () => {
 
 app.use(
   cors({
-    origin: ["http://localhost:4000"],
+    origin: ["http://localhost:5173"],
     methods: ["GET", "POST", "PUT", "DELETE"],
     credentials: true,
   })
 );
 app.use(cookieParser());
 
-app.use(cors());
+// app.use(cors());
 app.use(express.json());
 
 app.use("/", authRoutes);

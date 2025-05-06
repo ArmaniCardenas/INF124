@@ -8,16 +8,16 @@ export const userVerification = (req: Request, res: Response) => {
 
 
   if (!token) {
-    res.json({ status: false })
+    res.json({ success: false })
     return;
   }
   jwt.verify(token, "secret_key", async (err: jwt.VerifyErrors | null, data:any ) => {
     if (err) {
-     return res.json({ status: false })
+     return res.json({ success: false })
     } else {
       const user = await User.findById(data.id)
-      if (user) return res.json({ status: true, user: user.username })
-      else return res.json({ status: false })
+      if (user) return res.json({ success: true, user: user.username })
+      else return res.json({ success: false })
     }
 
   })

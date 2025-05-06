@@ -48,11 +48,12 @@ export const Signin: RequestHandler = async (req, res, next) => {
      const token = createSecretToken(user._id.toString());
      res.cookie("token", token, {
        httpOnly: true,
-       secure: true,
-       maxAge: 3600000
+       maxAge: 3600000,
+       path: '/',
      });
+
      res.status(201).json({ message: "User logged in successfully", success: true });
-     next()
+
   } catch (error) {
     console.error(error);
   }
