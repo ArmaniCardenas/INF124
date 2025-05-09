@@ -8,20 +8,23 @@ import App from "./App"
 import "./index.css"
 import 'react-toastify/dist/ReactToastify.css';
 import { CookiesProvider } from 'react-cookie';
+import { AuthProvider } from "./context/AuthContext";
 
 const queryClient = new QueryClient()
 
 
 createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
-    <QueryClientProvider client={queryClient}>
-      <BrowserRouter>
-        <CookiesProvider>
-          <ThemeProvider>
-            <App />
-          </ThemeProvider>
-        </CookiesProvider>
-      </BrowserRouter>
-    </QueryClientProvider>
+    <AuthProvider>
+      <QueryClientProvider client={queryClient}>
+        <BrowserRouter>
+          <CookiesProvider>
+            <ThemeProvider>
+              <App />
+            </ThemeProvider>
+          </CookiesProvider>
+        </BrowserRouter>
+      </QueryClientProvider>
+    </AuthProvider>
   </React.StrictMode>
 )

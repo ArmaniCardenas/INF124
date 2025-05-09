@@ -49,11 +49,15 @@ function App() {
         <Route 
           path="/Main"
           element={ 
-            <MainLayout>
-              <DocumentsPage />
-            </MainLayout>
+            <ProtectedRoute>
+              <MainLayout>
+                <DocumentsPage />
+              </MainLayout>
+            </ProtectedRoute>
           }
         />
+        
+       <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </>
   );
