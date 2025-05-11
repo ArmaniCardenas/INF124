@@ -1,4 +1,3 @@
-// src/components/Sidebar.tsx
 import React from 'react';
 import { ChevronsLeft, Menu } from 'lucide-react';
 import { cn } from '../../../lib/utils';
@@ -26,7 +25,6 @@ export default function Sidebar() {
           animating && 'transition-all duration-300 ease-out'
         )}
       >
-        {/* collapse button */}
         <button
           onClick={collapse}
           className="absolute top-4 right-4 opacity-0 group-hover:opacity-100 transition"
@@ -34,22 +32,18 @@ export default function Sidebar() {
           <ChevronsLeft />
         </button>
 
-        {/* your sidebar content */}
         <nav className="mt-12 px-4 space-y-4">
-          {/* e.g. list of documents... */}
           <a href="/app/1" className="block hover:bg-accent p-2 rounded">Doc 1</a>
           <a href="/app/2" className="block hover:bg-accent p-2 rounded">Doc 2</a>
-          {/* … */}
+          
         </nav>
 
-        {/* resize handle */}
         <div
           onMouseDown={startResize}
           className="absolute top-0 right-0 h-full w-1 bg-primary/20 cursor-ew-resize group-hover:opacity-100 opacity-0 transition"
         />
       </aside>
 
-      {/* content area starts to the right of the sidebar */}
       <div
         ref={contentRef}
         style={{

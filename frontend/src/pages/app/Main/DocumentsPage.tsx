@@ -1,4 +1,3 @@
-// src/pages/DocumentsPage.tsx
 import React from 'react';
 import { Button } from '../../../components/ui/button';
 import { PlusCircle } from 'lucide-react';

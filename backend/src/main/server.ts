@@ -4,6 +4,11 @@ import { Server as SocketIOServer } from 'socket.io';
 import cors from 'cors';
 import dotenv from 'dotenv';
 import authRoutes from '../infrastructure/controllers/authController';
+import documentRoutes from './routes/documentRoutes'
+
+
+
+
 import mongoose from 'mongoose';
 import cookieParser from 'cookie-parser';
 
@@ -55,5 +60,8 @@ app.use(cookieParser());
 
 // app.use(cors());
 app.use(express.json());
+
+app.use('/api/documents', documentRoutes);
+
 
 app.use("/", authRoutes);

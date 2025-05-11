@@ -8,11 +8,12 @@ import { Avatar, AvatarImage } from "../../../components/ui/avatar";
 
 import { Button } from "../../../components/ui/button"
 import { useAuth } from "../../../context/AuthContext";
+
 import { useNavigate } from "react-router";
 
 export const UserItem = () => {
 
-    const { logout } = useAuth();
+    const { user, logout } = useAuth();
     const navigate = useNavigate();
     
     return (
@@ -24,7 +25,7 @@ export const UserItem = () => {
                             <AvatarImage src="reading.png" />
                         </Avatar>
                         <span className="text-start font-medium line-clamp-1">
-                            User&apos;s Notion
+                            {user?.username}&apos;s Notion
                         </span>
                     </div>
                     <ChevronsLeftRight className="rotate-90 ml-2 text-muted-foreground h-4 w-4" />
@@ -41,7 +42,7 @@ export const UserItem = () => {
             >
 
                 <p className="text-xs font-medium leading-none text-muted-foreground text-black">
-                    something@hotmail.com
+                    {user?.email}
                 </p>
 
                 <div className="flex items-center gap-x-2 mt-2">
@@ -52,7 +53,7 @@ export const UserItem = () => {
                         </Avatar>
                     </div>
                     <p className="text-sm line-clamp-1 font-medium">
-                        User&apos;s Notion    
+                        {user?.username}&apos;s Notion    
                     </p>
                 </div>
 

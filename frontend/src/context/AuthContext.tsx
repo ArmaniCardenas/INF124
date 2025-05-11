@@ -1,7 +1,8 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
 import axios from "../api/axios";
 
-interface User { username: string }  
+interface User { username: string, email: string }  
+
 interface AuthContextType {
   user: User | null;
   loading: boolean;
@@ -17,9 +18,9 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    axios.post("/verify-token")
+    axios.post("/verify-token", {}, { withCredentials: true })
       .then(res => {
-        if (res.data.success) setUser({ username: res.data.user });
+        if (res.data.success) setUser(res.data.user as User);
       })
       .catch(() => setUser(null))
       .finally(() => setLoading(false));
@@ -27,11 +28,11 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   const login = async (email: string, password: string) => {
     try {
-      const { data } = await axios.post("/signin", { email, password });
+      const { data } = await axios.post("/signin", { email, password }, { withCredentials: true });
       if (data.success) {
 
-        const verify = await axios.post("/verify-token");
-        if (verify.data.success) setUser({ username: verify.data.user });
+        const verify = await axios.post("/verify-token", {}, { withCredentials: true});
+        setUser(verify.data.user)
         return true;
       }
     } catch {}
@@ -40,11 +41,11 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   const signup = async (newUser: { email: string; password: string; username: string }) => {
     try {
-      const { data } = await axios.post("/signup", newUser);
+      const { data } = await axios.post("/signup", newUser, { withCredentials : true });
       if (data.success) {
 
-        const verify = await axios.post("/verify-token");
-        if (verify.data.success) setUser({ username: verify.data.user });
+        const verify = await axios.post("/verify-token", {}, { withCredentials: true });
+        setUser(verify.data.user);
         return true;
       }
     } catch {}
@@ -52,7 +53,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   };
 
   const logout = async () => {
-    await axios.post("/logout");
+    await axios.post("/logout", {}, { withCredentials: true });
     setUser(null);
   };
 

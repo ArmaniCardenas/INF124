@@ -1,60 +1,45 @@
-import React, { useState } from "react";
+import React, { ChangeEvent, FormEvent, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
+import { useAuth } from "../../context/AuthContext";
+
+
 
 const Login = () => {
   const navigate = useNavigate();
-  const [inputValue, setInputValue] = useState({
-    email: "",
-    password: "",
-  });
-  const { email, password } = inputValue;
-  const handleOnChange = (e) => {
-    const { name, value } = e.target;
-    setInputValue({
-      ...inputValue,
-      [name]: value,
-    });
+   const { login } = useAuth();
+   const [credentials, setCredentials] = useState({ email: "", password: "" });
+
+
+
+  const handleOnChange = (e: ChangeEvent<HTMLInputElement>) => {
+    setCredentials({ ...credentials, [e.target.name]: e.target.value });
   };
 
-  const handleError = (err) =>
+  const handleError = (err: string) =>
     toast.error(err, {
       position: "bottom-left",
     });
-  const handleSuccess = (msg) =>
+  const handleSuccess = (msg: string) =>
     toast.success(msg, {
       position: "bottom-left",
     });
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    try {
-      const { data } = await axios.post(
-        "http://localhost:4000/signin",
-        {
-          ...inputValue,
-        },
-        { withCredentials: true }
-      );
-      console.log(data);
-      const { success, message } = data;
-      if (success) {
-        handleSuccess(message);
-        setTimeout(() => {
-          navigate("/home");
-        }, 1000);
-      } else {
-        handleError(message);
-      }
-    } catch (error) {
-      console.log(error);
+    const success = await login(credentials.email, credentials.password);
+    if (success) 
+    {
+      toast.success('Logged in');
+      navigate('/Main');
     }
-    setInputValue({
-      ...inputValue,
-      email: "",
-      password: "",
-    });
+
+    else
+    {
+      toast.error('Invalid');
+    }
+
   };
 
   return (
@@ -71,7 +56,7 @@ const Login = () => {
             <input
               type="email"
               name="email"
-              value={email}
+              value={credentials.email}
               placeholder="Enter your email"
               onChange={handleOnChange}
               className="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-700 bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -85,7 +70,7 @@ const Login = () => {
             <input
               type="password"
               name="password"
-              value={password}
+              value={credentials.password}
               placeholder="Enter your password"
               onChange={handleOnChange}
               className="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-700 bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
