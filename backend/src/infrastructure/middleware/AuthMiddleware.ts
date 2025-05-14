@@ -1,24 +1,33 @@
-import User from "../database/models/userModel";
+import UserModel from "../database/models/userModel";
 import jwt, { JwtPayload } from 'jsonwebtoken';
-import { Request, Response } from 'express';
+import { Request, Response, RequestHandler } from 'express';
 
-
-export const userVerification = (req: Request, res: Response) => {
-  const token = req.cookies.token
-
-
+export const userVerification: RequestHandler = (req, res, next) => {
+  const token = req.cookies.token;
   if (!token) {
-    res.json({ success: false })
+    res.status(401).json({ success: false, error: "No token" });
+    return;             
+  }
+
+  let payload: { id: string };
+  try {
+    payload = jwt.verify(token, "secret_key") as { id: string };
+  } catch {
+    res.status(401).json({ success: false, error: "Invalid" });
     return;
   }
-  jwt.verify(token, "secret_key", async (err: jwt.VerifyErrors | null, data:any ) => {
-    if (err) {
-     return res.json({ success: false })
-    } else {
-      const user = await User.findById(data.id)
-      if (user) return res.json({ success: true, user: user.username })
-      else return res.json({ success: false })
-    }
 
-  })
-}
+  UserModel.findById(payload.id).lean()
+    .then(user => {
+      if (!user) {
+        res.status(401).json({ success: false, error: "Error" });
+        return;
+      }
+      req.user = user;  
+      next();           
+    })
+    .catch(() => {
+      res.status(500).json({ success: false, error: "Server error " });
+    });
+};
+export default userVerification;

@@ -5,11 +5,11 @@ import { LandingPage } from './pages/app/LandingPage/LandingPage';
 import RegisterPage from './pages/auth/Login';
 import { Button } from './components/ui/button';
 import './index.css';
-import { LogIn } from 'lucide-react';
 import MarketingLayout from './pages/app/layout';
 import Navigation from './pages/app/Main/Navigation';
 import DocumentsPage from './pages/app/Main/DocumentsPage';
-import MainLayout from './pages/app/Main/MainLayout';import Login from './pages/app/Login';
+import MainLayout from './pages/app/Main/MainLayout';
+import Login from './pages/app/Login';
 import Signup from './pages/app/SignUp';
 import Home from './pages/app/Home';
 import Profile from './pages/app/Profile';
@@ -49,11 +49,15 @@ function App() {
         <Route 
           path="/Main"
           element={ 
-            <MainLayout>
-              <DocumentsPage />
-            </MainLayout>
+            <ProtectedRoute>
+              <MainLayout>
+                <DocumentsPage />
+              </MainLayout>
+            </ProtectedRoute>
           }
         />
+        
+       <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </>
   );

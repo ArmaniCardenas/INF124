@@ -108,7 +108,6 @@ export default function Navigation() {
 
   return (
     <>
-      {/* Sidebar */}
       <aside
         ref={sidebarRef}
         className={cn(
@@ -118,7 +117,6 @@ export default function Navigation() {
           !isCollapsed && "w-60"
         )}
       >
-        {/* Collapse*/}
         <div
           className={cn(
             "w-6 h-6 text-muted-foreground rounded-sm hover:bg-neutral-300 dark:hover:bg-neutral-600 absolute top-3 right-2",
@@ -130,14 +128,12 @@ export default function Navigation() {
           <ChevronsLeft className="w-6 h-6" />
         </div>
 
-        {/* Document list & actions */}
         <UserItem/>
         <div className="mt-4">
             Documents
           
         </div>
 
-        {/* Resize  */}
         <div
           className={cn(
             "group-hover/sidebar:opacity-100 opacity-0 cursor-ew-resize absolute h-full w-1 bg-primary/10 right-0 top-0",
@@ -148,7 +144,6 @@ export default function Navigation() {
         />
       </aside>
 
-      {/* Top navbar */}
       <div
         ref={navbarRef}
         className={cn(

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, ChangeEvent, FormEvent } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
@@ -11,7 +11,7 @@ const Signup = () => {
     username: "",
   });
   const { email, password, username } = inputValue;
-  const handleOnChange = (e) => {
+  const handleOnChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setInputValue({
       ...inputValue,
@@ -19,16 +19,16 @@ const Signup = () => {
     });
   };
 
-  const handleError = (err) =>
+  const handleError = (err: string) =>
     toast.error(err, {
       position: "bottom-left",
     });
-  const handleSuccess = (msg) =>
+  const handleSuccess = (msg: string) =>
     toast.success(msg, {
       position: "bottom-right",
     });
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
       const { data } = await axios.post(
@@ -42,7 +42,7 @@ const Signup = () => {
       if (success) {
         handleSuccess(message);
         setTimeout(() => {
-          navigate("/home");
+          navigate("/Main");
         }, 1000);
       } else {
         handleError(message);

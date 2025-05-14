@@ -1,14 +1,20 @@
 
 import React from "react"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem,
-    DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger
+    DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger,
  } from "../../../components/ui/dropdown-menu"
 import { ChevronsLeftRight  } from "lucide-react"
-import { AvatarImage } from "@radix-ui/react-avatar"
-import { Avatar } from "@radix-ui/react-avatar"
+import { Avatar, AvatarImage } from "../../../components/ui/avatar";
+
 import { Button } from "../../../components/ui/button"
+import { useAuth } from "../../../context/AuthContext";
+
+import { useNavigate } from "react-router";
 
 export const UserItem = () => {
+
+    const { user, logout } = useAuth();
+    const navigate = useNavigate();
     
     return (
         <DropdownMenu>
@@ -19,7 +25,7 @@ export const UserItem = () => {
                             <AvatarImage src="reading.png" />
                         </Avatar>
                         <span className="text-start font-medium line-clamp-1">
-                            User's Notion
+                            {user?.username}&apos;s Notion
                         </span>
                     </div>
                     <ChevronsLeftRight className="rotate-90 ml-2 text-muted-foreground h-4 w-4" />
@@ -27,44 +33,47 @@ export const UserItem = () => {
                 </div>
 
             </DropdownMenuTrigger>
+
             <DropdownMenuContent
-            className="w-80 bg-white"
-            align="start"
-            alignOffset={11}
-            forceMount
+                className="w-80 bg-white p-2"
+                align="start"
+                alignOffset={11}
+                forceMount
             >
-                <div className="flex flex-col space-y-4 p-2">
-                    <p className="text-xs font-medium leading-none text-muted-foreground text-black">
-                        something@hotmail.com
-                    </p>
-                    <div className="flex items-center gap-x-2">
-                        <div className="rounded-md bg-secondary p-1">
-                            <Avatar className="h-8 w-1">
-                                <AvatarImage src="" />
-                            </Avatar>
-                        </div>
-                        <div className="space-y-1">
-                            <p className="text-sm line-clamp-1">
-                                user's Notion    
 
-                            </p>
+                <p className="text-xs font-medium leading-none text-muted-foreground text-black">
+                    {user?.email}
+                </p>
 
-                        </div>
+                <div className="flex items-center gap-x-2 mt-2">
 
+                    <div className="rounded-full bg-secondary p-1">
+                        <Avatar className="h-8 w-8">
+                            <AvatarImage src="/reading.png" />
+                        </Avatar>
                     </div>
-
+                    <p className="text-sm line-clamp-1 font-medium">
+                        {user?.username}&apos;s Notion    
+                    </p>
                 </div>
-                <DropdownMenuSeparator>
-                    <DropdownMenuItem asChild className="w-full cursor-pointer text-muted-foreground">
-                        <Button >
+
+            
+                <DropdownMenuSeparator className="my-2"/>
+                    <DropdownMenuItem asChild className="cursor-pointer text-muted-foreground">
+                        <Button onClick={async ()=> {
+                            await logout();
+                            navigate("/")
+                        
+                        }}
+                        variant="ghost" className="w-full justify-center"
+                        >
                             Logout
                         </Button>
                     </DropdownMenuItem>
-                </DropdownMenuSeparator>
-
-
-            </DropdownMenuContent>
-
-        </DropdownMenu>
+                </DropdownMenuContent>
+            </DropdownMenu>
     )
 }
+
+
+
