@@ -1,21 +1,72 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "./../../context/AuthContext";
+import axios from "../../api/axios";
+import { ToastContainer, toast } from "react-toastify";
+
 
 const ProfileSettings = () => {
   const navigate = useNavigate();
+  const { user, logout } = useAuth();
+  
 
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [email, setEmail] = useState(user?.email);
+  const [username, setUsername] = useState(user?.username);
+  const [currentPassword, setCurrentPassword] = useState("");
+  const [newPassword, setNewPassword] = useState("");
   const [darkMode, setDarkMode] = useState(false);
 
-  const handleLogout = () => {
-    // Example: remove auth cookies or tokens here
-    navigate("/logout");
+  const updateUsername = async () => {
+    try {
+      const response = await axios.patch(
+        '/profile/newUsername',
+        { username }, // request body
+        { withCredentials: true } // if you're using cookies for auth
+      );
+      console.log(response);
+      setUsername(response.data.user.username);
+
+      toast.success('Username updated successfully!');
+    } catch (error) {
+      console.error(error);
+      toast.error('Error updating username.');
+    }
   };
 
-  const handleSave = () => {
-    console.log("Saving:", { email, password });
-    // TODO: Call backend to update credentials
+  const updateEmail = async () => {
+    try {
+      const response = await axios.patch(
+        '/profile/newEmail',
+        { email }, // request body
+        { withCredentials: true } //  cookies for auth
+      );
+      console.log(response);
+      setEmail(response.data.user.email);
+
+      toast.success('Email updated successfully!');
+    } catch (error) {
+      console.error(error);
+      toast.error('Error updating Email.');
+    }
+  };
+
+  const updatePassword = async () => {
+    try {
+      console.log("new password: ", newPassword);
+      console.log("current password: ", currentPassword);
+
+      const response = await axios.patch(
+        '/profile/newPassword',
+        { currentPassword, newPassword }, // request body
+        { withCredentials: true } //  cookies for auth
+      );
+      toast.success('Password updated successfully!');
+      setCurrentPassword("");
+      setNewPassword("");
+    } catch (error) {
+      console.error(error);
+      toast.error('Error updating Password.');
+    }
   };
 
   return (
@@ -30,8 +81,15 @@ const ProfileSettings = () => {
             </button>
           </li>
           <li>
-            <button onClick={handleLogout} className="text-left w-full hover:underline text-red-500">
-              Logout
+            <button 
+              onClick={async ()=> {
+                await logout();
+                navigate("/")
+                        
+              }} 
+              className="text-left w-full hover:underline text-red-500"
+              >
+                Logout
             </button>
           </li>
         </ul>
@@ -42,6 +100,23 @@ const ProfileSettings = () => {
         <h1 className="text-2xl font-semibold mb-6">Profile Settings</h1>
 
         <div className="space-y-6 max-w-md">
+
+          <div>
+            <label className="block text-sm font-medium mb-1">Username</label>
+            <input
+              type="text"
+              className="w-full border px-3 py-2 rounded-md bg-white text-black"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+            />
+            <button
+              onClick={updateUsername}
+              className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
+            >
+              Save Changes
+            </button>
+          </div>
+
           <div>
             <label className="block text-sm font-medium mb-1">Email</label>
             <input
@@ -50,16 +125,36 @@ const ProfileSettings = () => {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
             />
+            <button
+              onClick={updateEmail}
+              className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
+            >
+              Save Changes
+            </button>
           </div>
 
           <div>
-            <label className="block text-sm font-medium mb-1">Password</label>
+            <label className="block text-sm font-medium mb-1">New Password</label>
             <input
               type="password"
               className="w-full border px-3 py-2 rounded-md bg-white text-black"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
+              value={newPassword}
+              onChange={(e) => setNewPassword(e.target.value)}
             />
+
+            <label className="block text-sm font-medium mb-1"> Current Password</label>
+            <input
+              type="password"
+              className="w-full border px-3 py-2 rounded-md bg-white text-black"
+              value={currentPassword}
+              onChange={(e) => setCurrentPassword(e.target.value)}
+            />
+            <button
+              onClick={updatePassword}
+              className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
+            >
+              Save Changes
+            </button>
           </div>
 
           <div className="flex items-center justify-between">
@@ -77,14 +172,7 @@ const ProfileSettings = () => {
               />
             </button>
           </div>
-
-
-          <button
-            onClick={handleSave}
-            className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
-          >
-            Save Changes
-          </button>
+          <ToastContainer/>
         </div>
       </main>
     </div>
