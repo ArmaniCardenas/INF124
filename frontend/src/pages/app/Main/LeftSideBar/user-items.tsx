@@ -2,12 +2,12 @@
 import React from "react"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem,
     DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger,
- } from "../../../components/ui/dropdown-menu"
+ } from "../../../../components/ui/dropdown-menu"
 import { ChevronsLeftRight  } from "lucide-react"
-import { Avatar, AvatarImage } from "../../../components/ui/avatar";
+import { Avatar, AvatarImage } from "../../../../components/ui/avatar";
 
-import { Button } from "../../../components/ui/button"
-import { useAuth } from "../../../context/AuthContext";
+import { Button } from "../../../../components/ui/button"
+import { useAuth } from "../../../../context/AuthContext";
 
 import { useNavigate } from "react-router";
 
@@ -19,13 +19,13 @@ export const UserItem = () => {
     return (
         <DropdownMenu>
             <DropdownMenuTrigger asChild>
-                <div role="button" className="flex items-center text-sm p-3 w-full hover:bg-primary/5">
-                    <div className="gap-x-2 flex items-center max-w-[150px]">
+                <div role="button" className="flex items-center text-sm p-3 w-full  hover:bg-neutral-200 ">
+                    <div className="gap-x-2 flex items-center max-w-[150px] ">
                         <Avatar className="h-5 w-5">
                             <AvatarImage src="reading.png" />
                         </Avatar>
                         <span className="text-start font-medium line-clamp-1">
-                            {user?.username}&apos;s Notion
+                                {user?.username}&apos;s Notion
                         </span>
                     </div>
                     <ChevronsLeftRight className="rotate-90 ml-2 text-muted-foreground h-4 w-4" />
@@ -65,7 +65,7 @@ export const UserItem = () => {
                             navigate("/")
                         
                         }}
-                        variant="ghost" className="w-full justify-center"
+                        variant="ghost" className="w-full justify-center  hover:bg-neutral-200 "
                         >
                             Logout
                         </Button>

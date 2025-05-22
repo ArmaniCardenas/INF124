@@ -6,7 +6,7 @@ import RegisterPage from './pages/auth/Login';
 import { Button } from './components/ui/button';
 import './index.css';
 import MarketingLayout from './pages/app/layout';
-import Navigation from './pages/app/Main/Navigation';
+import Navigation from './pages/app/Main/LeftSideBar/Navigation';
 import DocumentsPage from './pages/app/Main/DocumentsPage';
 import MainLayout from './pages/app/Main/MainLayout';
 import Login from './pages/app/Login';
