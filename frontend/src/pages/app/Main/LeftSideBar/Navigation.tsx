@@ -12,6 +12,8 @@ import {
   Trash,
 } from "lucide-react";
 
+import { useSearchCtx } from "../../../../context/SearchContext";
+
 import { Popover, PopoverTrigger, PopoverContent } from "../../../../components/ui/popover";
 import {DocumentList} from "./DocumentList";
 import { Item } from "./Item";
@@ -23,6 +25,8 @@ import { toast, ToastContainer } from 'react-toastify';
 import { useMutation, useQueryClient, useQuery } from '@tanstack/react-query';
 import { createDocument, fetchDocuments, NewDocument, Document } from "../../../../api/documents";
 import { useAuth } from "../../../../context/AuthContext";
+import { TrashBox } from "./trash-box";
+import { useSettings } from "./use-settings";
 
 
 export default function Navigation() {
@@ -30,6 +34,8 @@ export default function Navigation() {
 
 
   const { user } = useAuth();
+  const { open: openSearch } = useSearchCtx();
+  const { open: openSettings } = useSettings();  
 
   const navigate = useNavigate();
   const params = useParams<{ documentId?: string }>();
@@ -167,8 +173,8 @@ export default function Navigation() {
         </div>
         <div>
           <UserItem/>
-          <Item label="Search" icon={Search} isSearch onClick={() => {}}/>
-          <Item label="Settings" icon={Settings} onClick={()=> {}}/>
+          <Item label="Search" icon={Search} isSearch onClick={()=> openSearch()}/>
+          <Item label="Settings" icon={Settings} onClick={openSettings}/>
           <Item
           
             onClick={handleCreate}
@@ -191,7 +197,7 @@ export default function Navigation() {
             <PopoverContent
             className="p-0 w-72"
             side={isMobile ? 'bottom' :  'right'}>
-              trash
+              <TrashBox/>
 
             </PopoverContent>
           </Popover>
@@ -223,6 +229,7 @@ export default function Navigation() {
             {isCollapsed && (
               <MenuIcon className="w-6 h-6 text-muted-foreground" onClick={resetWidth} />
             )}
+
             
           </nav>
         )}

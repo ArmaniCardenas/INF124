@@ -4,7 +4,6 @@
 import { Skeleton } from "../../../../components/ui/skeleton"
 
 
-
 import { cn } from "../../../../lib/utils"
 
 
@@ -16,7 +15,9 @@ import { useAuth } from "../../../../context/AuthContext"
 import { useMutation, useQueryClient } from "@tanstack/react-query"
 import { ChevronDown, ChevronRight, LucideIcon, MoreHorizontal, Plus, Trash } from "lucide-react"
 import { toast } from "react-toastify"
-import { useNavigate } from "react-router-dom"
+import { useNavigate, useParams } from "react-router-dom"
+
+
 import { archiveDocument,createDocument, Document as Doc} from "../../../../api/documents"
 
 
@@ -40,6 +41,7 @@ export function Item ({id,label,onClick,icon:Icon,active,documentIcon,isSearch,l
 
   const {user} = useAuth()
   const navigate = useNavigate()
+  const params = useParams<{ documentId?: string }>();  
   const queryClient = useQueryClient(); 
 
   const create = useMutation({
@@ -53,26 +55,32 @@ export function Item ({id,label,onClick,icon:Icon,active,documentIcon,isSearch,l
 
   const archive = useMutation({
     mutationFn: archiveDocument,
-    onSuccess: () => {
+    onSuccess: (_data, archivedId) => {
       queryClient.invalidateQueries({ queryKey: ['documents'] })
-      navigate('/documents')
+      if(params.documentId === archivedId)
+      {
+        navigate('/documents', { replace: true });
+
+      }
+      
     },
   })
 
 
     const handleArchive = (e: React.MouseEvent) => {
-    e.stopPropagation()
-    if (!id) return
-    const p = archive.mutateAsync(id)
-    toast.promise(p, {
-      success: 'Note moved to trash!',
-      error: 'Failed to archive note',
-    })
+      e.stopPropagation()
+      if (!id) return
+      const p = archive.mutateAsync(id)
+      toast.promise(p, {
+        success: 'Note moved to trash!',
+        error: 'Failed to archive note',
+      })
   }
 
   const handleCreate = (e: React.MouseEvent) => {
     e.stopPropagation()
     onCreate?.()
+    toast.success('New note created!');
 
     
     
@@ -125,10 +133,10 @@ return (
                 <MoreHorizontal className="w-4 h-4 text-muted-foreground"/>
               </div>
             </DropdownMenuTrigger>
-            <DropdownMenuContent className="w-60" align="start" side="right" forceMount>
+            <DropdownMenuContent className="w-60" align="start" side="right" forceMount onClick={e => e.stopPropagation()}>
               <DropdownMenuItem onClick={handleArchive}>
                 <Trash className="w-4 h-4 mr-2"/>
-                Delete
+                Move to Trash
               </DropdownMenuItem>
               <DropdownMenuSeparator/>
               <div className="text-xs text-muted-foreground p-2">

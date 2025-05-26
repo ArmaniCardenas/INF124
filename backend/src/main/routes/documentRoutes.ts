@@ -1,4 +1,4 @@
-import { Router } from "express";
+import { Router, RequestHandler } from "express";
 import userVerification from "../../infrastructure/middleware/AuthMiddleware";
 import * as ctrl from "../../infrastructure/controllers/documentController";
 
@@ -7,10 +7,21 @@ const router = Router();
 router.use(userVerification);   
 
 router
+  .get("/trash", ctrl.listTrashDocuments)
+  .patch("/:id/restore", ctrl.restoreDocument)
+
   .post("/",     ctrl.createDocument)
   .get("/",      ctrl.listDocuments)
-  .get("/:id",   ctrl.getDocument)
+
+  .patch("/:id/archive", ctrl.archiveDocument)
   .patch("/:id", ctrl.updateDocument)
-  .delete("/:id",ctrl.archiveDocument);
+
+
+
+  .get("/:id",   ctrl.getDocument)
+
+  
+
+  .delete("/:id",ctrl.deleteDocument);
 
 export default router;

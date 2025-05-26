@@ -2,6 +2,7 @@ import axios from './axios'
 
 export interface Document {
   _id: string
+  icon: string; 
   title: string
   content?: string
   isArchived: boolean
@@ -38,4 +39,18 @@ export const createDocument = async (payload: NewDocument): Promise<Document> =>
 export const archiveDocument = async (id: string) => {
   const { data } = await axios.patch<{message:string}>(`/api/documents/${id}/archive`, {})
   return data
+}
+
+export const fetchTrash = () => axios.get<Document[]>('/api/documents/trash').then(r=>r.data)
+
+
+
+export const restoreDocument = (id: string) => axios.patch<Document>(`/api/documents/${id}/restore`).then(r => r.data);
+
+
+export const deleteDocument  = (id: string) => axios.delete<{message:string}>(`/api/documents/${id}`).then(r => r.data);
+
+export const fetchAllDocuments = async (): Promise<Document[]> => {
+  const {data} = await axios.get<Document[]>('/api/documents');
+  return data.filter(d => !d.isArchived); 
 }
