@@ -7,7 +7,7 @@ export interface Collaborator {
 export interface Document {
     _id?: string; 
     title: string; 
-    content: string; 
+    content: Object; 
     workspaceId: string; 
     collaborators: Collaborator[]; 
     isArchived: boolean; 

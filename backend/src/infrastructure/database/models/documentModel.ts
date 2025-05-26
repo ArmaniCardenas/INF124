@@ -12,7 +12,7 @@ const collaboratorSchema = new mongoose.Schema({
     role: {
         type: String,
         enum: ['owner', 'editor', 'viewer'], 
-        default: 'edtior'
+        default: 'editor'
         }
 
     },
@@ -27,8 +27,8 @@ const documentSchema = new mongoose.Schema<Document>({
     },
 
     content: {
-        type: String,
-        default: ""
+        type: Object,
+        default: {}
     },
 
     workspaceId: {

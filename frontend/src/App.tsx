@@ -14,6 +14,8 @@ import Signup from './pages/app/SignUp';
 import Home from './pages/app/Home';
 import Profile from './pages/app/Profile';
 import ProtectedRoute from './components/auth/ProtectedRoute';
+import { MyDocumentsPage } from './pages/app/Document/MyDocumentsPage';
+import { DocumentEditorPage } from './pages/app/Document/DocumentEditorPage';
 // import ProtectedRoute from './components/auth/protectedRoute';
 
 function App() {
@@ -56,8 +58,24 @@ function App() {
             </ProtectedRoute>
           }
         />
+        <Route 
+          path="/Main/documents"
+          element={ 
+            <ProtectedRoute>
+              <MyDocumentsPage />
+            </ProtectedRoute>
+          }
+        />
+        <Route 
+          path="/Main/documents/:id"
+          element={ 
+            <ProtectedRoute>
+              <DocumentEditorPage />
+            </ProtectedRoute>
+          }
+        />
         
-       <Route path="*" element={<Navigate to="/" replace />} />
+       {/* <Route path="*" element={<Navigate to="/" replace />} /> */}
       </Routes>
     </>
   );
