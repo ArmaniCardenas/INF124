@@ -1,5 +1,6 @@
-import axios from "axios";
+import axios from 'axios';
+
 export default axios.create({
-    baseURL: "http://localhost:4000",
-    withCredentials: true, 
+  baseURL: import.meta.env.VITE_BACKEND_URL || 'http://localhost:4000',
+  withCredentials: true,
 });

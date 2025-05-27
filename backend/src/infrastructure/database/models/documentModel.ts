@@ -31,20 +31,28 @@ const documentSchema = new mongoose.Schema<Document>({
         default: {}
     },
 
-    workspaceId: {
-        type: String, 
-        default: ""
-    },
-
     collaborators: [collaboratorSchema],
 
     isArchived: {
         type: Boolean,
         default: false
     },
+
+    parentDocument: {
+        //type: Types.ObjectId,
+        type: String,
+        default: ""
+    },
+ 
+
+    workspaceId: {
+        type: String, 
+        default: ""
+    },
 },
 {timestamps: true}
 
 );
+
 
 export default model<Document>('Document', documentSchema);

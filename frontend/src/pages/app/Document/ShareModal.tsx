@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { shareDocument } from '../../../api/document';
+import { shareDocument } from '../../../api/documents';
 
 export const ShareModal = ({ docId, onClose }) => {
   const [userEmail, setUser] = useState('');

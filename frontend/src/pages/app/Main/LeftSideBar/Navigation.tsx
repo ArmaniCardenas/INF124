@@ -3,21 +3,72 @@ import { useParams, useNavigate } from "react-router-dom";
 import { useMediaQuery } from "usehooks-ts";
 import {
   ChevronsLeft,
+  ChevronsRight,
   MenuIcon,
   Plus,
+  PlusCircle,
   Search,
   Settings,
   Trash,
 } from "lucide-react";
 
+import { useSearchCtx } from "../../../../context/SearchContext";
 
-import { cn } from "../../../lib/utils";
-import Navbar from "../LandingPage/Navbar";
+import { Popover, PopoverTrigger, PopoverContent } from "../../../../components/ui/popover";
+import {DocumentList} from "./DocumentList";
+import { Item } from "./Item";
+
+import { cn } from "../../../../lib/utils";
+import Navbar from "../../LandingPage/Navbar";
 import { UserItem } from "./user-items";
+import { toast, ToastContainer } from 'react-toastify';
+import { useMutation, useQueryClient, useQuery } from '@tanstack/react-query';
+import { createDocument, fetchDocuments, NewDocument, Document } from "../../../../api/documents";
+import { useAuth } from "../../../../context/AuthContext";
+import { TrashBox } from "./trash-box";
+import { useSettings } from "./use-settings";
+
 
 export default function Navigation() {
+
+
+
+  const { user } = useAuth();
+  const { open: openSearch } = useSearchCtx();
+  const { open: openSettings } = useSettings();  
+
   const navigate = useNavigate();
   const params = useParams<{ documentId?: string }>();
+  const queryClient = useQueryClient(); 
+
+  const { data: documents = [], isLoading, isError } = useQuery<Document[], Error>({
+    queryKey: ['documents'],
+    queryFn: () => fetchDocuments(),
+  });
+
+
+  console.log({ documents, isLoading, isError });
+
+  const createPage = useMutation({
+      mutationFn: (payload: NewDocument) => createDocument(payload),
+      onSuccess: (doc) => {
+        toast.success(`New note created!`)
+        queryClient.invalidateQueries({queryKey: ['documents']})
+      },
+      onError: () => {
+        toast.error("Couldn't create page")
+      },
+    })
+
+
+
+  const handleCreate = () => 
+  {
+    createPage.mutate({ title: 'Untitled', content: ''});
+  }
+
+
+
   const isMobile = useMediaQuery("(max-width: 768px)");
 
   const sidebarRef = useRef<HTMLDivElement>(null);
@@ -46,7 +97,6 @@ export default function Navigation() {
     } 
   }, [params.documentId, isMobile]);
 
-  /** Mouse‐drag resize handlers **/
   const handleMouseDown = (e: React.MouseEvent) => {
     e.preventDefault();
     isResizingRef.current = true;
@@ -70,7 +120,6 @@ export default function Navigation() {
   };
 
 
-  /** Expand/collapse  **/
   const resetWidth = () => {
     if (sidebarRef.current && navbarRef.current) {
 
@@ -100,11 +149,6 @@ export default function Navigation() {
   };
 
 
-  const handleCreate = () => {
-    
-
-    console.log("Create new doc…");
-  };
 
   return (
     <>
@@ -127,11 +171,37 @@ export default function Navigation() {
         >
           <ChevronsLeft className="w-6 h-6" />
         </div>
-
-        <UserItem/>
-        <div className="mt-4">
-            Documents
+        <div>
+          <UserItem/>
+          <Item label="Search" icon={Search} isSearch onClick={()=> openSearch()}/>
+          <Item label="Settings" icon={Settings} onClick={openSettings}/>
+          <Item
           
+            onClick={handleCreate}
+            label="New Page"
+            icon={PlusCircle}
+          />
+
+        </div>
+
+        
+        <div className="mt-4">
+          <DocumentList/>
+          <Item onClick={handleCreate}
+          icon={Plus}
+          label="Add a page"/>
+          <Popover>
+            <PopoverTrigger className="w-full mt-4">
+              <Item label="Trash" icon={Trash}></Item>
+            </PopoverTrigger>
+            <PopoverContent
+            className="p-0 w-72"
+            side={isMobile ? 'bottom' :  'right'}>
+              <TrashBox/>
+
+            </PopoverContent>
+          </Popover>
+            
         </div>
 
         <div
@@ -152,13 +222,14 @@ export default function Navigation() {
           isCollapsed ? "left-0 w-full" : "left-60 w-[calc(100%-240px)]"
         )}
       >
-        {params.documentId ? (
+        {!!params.documentId ? (
           <Navbar   />
         ) : (
           <nav className="w-full flex justify-between">
             {isCollapsed && (
               <MenuIcon className="w-6 h-6 text-muted-foreground" onClick={resetWidth} />
             )}
+
             
           </nav>
         )}

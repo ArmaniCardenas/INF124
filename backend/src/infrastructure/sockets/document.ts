@@ -25,7 +25,7 @@ export const registerDocumentSocket = (io: Server) => {
   //   const token = parsedCookies.token;
 
   //   if (!token) {
-  //     console.log('❌ Token not found in cookies');
+  //     console.log(' Token not found in cookies');
 
   //     return next(new Error('Token not found in cookies'));
   //   }

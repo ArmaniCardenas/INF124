@@ -1,8 +1,8 @@
 import { useParams } from 'react-router-dom';
 import { useEffect, useState } from 'react';
-import { getDocument } from '../../../api/document';
 import { Editor } from './Editor';
 import { ShareModal } from './ShareModal';
+import { getDocument } from '../../../api/documents';
 
 export const DocumentEditorPage = () => {
   const { id } = useParams();
@@ -23,7 +23,9 @@ export const DocumentEditorPage = () => {
         <h1 className="text-xl font-semibold">{doc.title}</h1>
         <button onClick={() => setShowModal(true)} className="bg-gray-300 px-4 py-2 rounded">Share</button>
       </div>
-      <Editor content={doc.content} docId={id} editable={true} />
+      <div className="border-2 border-black rounded p-2">
+        <Editor content={doc.content} docId={id} editable={true} />
+      </div>
       {showModal && <ShareModal docId={doc._id} onClose={() => setShowModal(false)} />}
 
        {/* {permission === 'edit'} /> */}
