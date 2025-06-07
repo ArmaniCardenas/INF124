@@ -7,73 +7,81 @@ const cookie = require('cookie');
 
 export const registerDocumentSocket = (io: Server) => {
 
-  // io.use((socket, next) => {
-  //   // console.log('cookie:', cookie);
-  //   // console.log('cookie.parse:', cookie?.parse?.toString());
+  io.use((socket, next) => {
+    // console.log('👋 Socket middleware started');
 
+    const cookieHeader = socket.handshake.headers.cookie;
+    // console.log('🍪 Raw cookie:', cookieHeader);
 
-  //     console.log('socket.handshake.headers.cookie:', socket.handshake.headers.cookie); 
+    if (!cookieHeader) {
+      console.log('❌ No cookies found');
+      return next(new Error('No cookies found'));
+    }
 
-  //   const cookies = socket.handshake.headers.cookie;
-  //   if (!cookies) {
-  //         console.log(' No cookies found');
+    let parsedCookies;
+    try {
+      parsedCookies = cookie.parse(cookieHeader);
+    } catch (err) {
+      console.error('❌ Failed to parse cookies:', err);
+      return next(new Error('Cookie parse failed'));
+    }
 
-  //     return next(new Error('No cookies found'));
-  //   }
+    // console.log('✅ Parsed cookies:', parsedCookies);
 
-  //   const parsedCookies = cookie.parse(cookies);
-  //   const token = parsedCookies.token;
+    const token = parsedCookies.token;
+    if (!token) {
+      console.log('❌ Token not found in cookies');
+      return next(new Error('Token not found'));
+    }
 
-  //   if (!token) {
-  //     console.log(' Token not found in cookies');
-
-  //     return next(new Error('Token not found in cookies'));
-  //   }
-
-  //   try {
-  //     const payload = jwt.verify(token, process.env.JWT_SECRET!);
-  //     socket.data.user = payload;
-  //     console.log('here')
-  //     next();
-  //   } catch (err) {
-  //     return next(new Error('Invalid token'));
-  //   }
-  // });
-
+    try {
+      const payload = jwt.verify(token, process.env.JWT_SECRET || 'secret_key');
+      socket.data.user = payload;
+      // console.log('✅ Authenticated user:', payload);
+      next();
+    } catch (err) {
+      console.error('❌ Invalid token:', err);
+      return next(new Error('Invalid token'));
+    }
+  });
 
   io.on('connection', socket => {
     const user = socket.data.user;
 
-    console.log('a user connected');
+    // console.log('a user connected');
 
     socket.on('join-document', async ({ docId }) => {
-      // const doc = await DocumentModel.findById(docId).populate('collaborators.userId');
-      // if (!doc) return socket.emit('error', 'Document not found');
+      // console.log('finding doc and collaborater');
 
-      // const collaborator = doc.collaborators.find(c =>
-      //   c.userId.toString() === user._id.toString()
-      // );
+      const doc = await DocumentModel.findById(docId).populate('collaborators.userId');
+      if (!doc){
+        console.log('no doc found');
+        return socket.emit('error', 'Document not found');
+      } 
+      const collaborator = doc.collaborators.find(c =>
+        c.userId._id.toString() === user.id.toString()
+      );
 
-      // if (!collaborator) {
-      //   return socket.emit('permission-denied', 'You are not a collaborator');
-      // }
-
+      if (!collaborator) {
+        console.log('no found collaborator permission for user')
+        return socket.emit('permission-denied', 'You are not a collaborator');
+      }
       socket.join(docId);
-      // socket.data.docRole = collaborator.role;
+      socket.data.docRole = collaborator.role;
     });
 
     socket.on('send-changes', ({ docId, delta }) => {
-      // if (socket.data.docRole !== 'editor' && socket.data.docRole !== 'owner') {
-      //   return socket.emit('permission-denied', 'You do not have edit permissions');
-      // }
+      if (socket.data.docRole !== 'editor' && socket.data.docRole !== 'owner') {
+        return socket.emit('permission-denied', 'You do not have edit permissions');
+      }
 
       socket.to(docId).emit('receive-changes', delta);
     });
 
     socket.on('save-document', async ({ docId, content }) => {
-      //  if (socket.data.docRole !== 'editor' && socket.data.docRole !== 'owner') {
-      //   return socket.emit('permission-denied', 'You do not have permission to save');
-      // }
+       if (socket.data.docRole !== 'editor' && socket.data.docRole !== 'owner') {
+        return socket.emit('permission-denied', 'You do not have permission to save'); 
+      }
 
       try {
         await DocumentModel.findByIdAndUpdate(docId, { content });
