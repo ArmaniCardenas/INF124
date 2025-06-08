@@ -38,7 +38,7 @@ export async function listDocuments(req: Request, res: Response) {
   }
 
   const docs = await DocumentModel.find(filter)
-    .select('_id title updatedAt parentDocument');
+    .select('_id title updatedAt parentDocument icon');
 
   res.json(docs);
 }
@@ -50,7 +50,13 @@ export const listTrashDocuments: AsyncHandler = async (req, res) => {
   const docs = await DocumentModel.find({
     'collaborators.userId': userId,
     isArchived: true
+<<<<<<< Updated upstream
   }).select('_id title updatedAt parentDocument')
+=======
+  }).select('_id title updatedAt parentDocument icon')
+    console.log('docs: ', docs);
+
+>>>>>>> Stashed changes
   res.json(docs)
 
 }
@@ -153,3 +159,23 @@ async function collectDescendantIds(rootId: string): Promise<string[]>
   return [...direct.map(d=> d._id.toString()), ...nested.flat()];
 }
 
+<<<<<<< Updated upstream
+=======
+export async function updateIcon(req: Request, res: Response)
+{
+  const { icon } = req.body;
+
+  const doc = req.document!; 
+  doc.icon = icon; 
+  await doc.save(); 
+  res.json(doc); 
+}
+
+export async function removeIcon(req: Request, res: Response)
+{
+  const doc = req.document!; 
+  doc.icon = ""; 
+  await doc.save(); 
+  res.json(doc); 
+}
+>>>>>>> Stashed changes

@@ -32,7 +32,7 @@ const Login = () => {
     if (success) 
     {
       toast.success('Logged in');
-      navigate('/Main');
+      navigate('/documents');
     }
 
     else

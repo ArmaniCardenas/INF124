@@ -1,4 +1,4 @@
-import { Routes, Route, Navigate, redirect } from 'react-router';
+import { Routes, Route, Navigate, redirect, BrowserRouter } from 'react-router';
 
 import { Heading } from './pages/app/LandingPage/page';
 import { LandingPage } from './pages/app/LandingPage/LandingPage';
@@ -14,53 +14,66 @@ import Signup from './pages/app/SignUp';
 import Home from './pages/app/Home';
 import Profile from './pages/app/Profile';
 import ProtectedRoute from './components/auth/ProtectedRoute';
+<<<<<<< Updated upstream
 // import ProtectedRoute from './components/auth/protectedRoute';
+=======
+//import { MyDocumentsPage } from './pages/app/Document/MyDocumentsPage';
+//import { DocumentEditorPage } from './pages/app/Document/DocumentEditorPage';
+import DocumentPage from './pages/app/Document/DocumentPage';
+import { ToastContainer } from 'react-toastify';
+>>>>>>> Stashed changes
 
-function App() {
+
+export default function App() {
   return (
     <>
+    <BrowserRouter>
+      
       <Routes>
+
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
-        <Route
-          path="/home"
-          element={
-            <ProtectedRoute>
-              <Home />
-            </ProtectedRoute>
-          }
-        /> 
-        <Route
-          path="/profile"
-          element={
-            <ProtectedRoute>
-              <Profile />
-            </ProtectedRoute>
-          }
-        />        
+
+
         <Route 
           path="/" 
           element={
             <MarketingLayout>
               <LandingPage />
             </MarketingLayout>  
-          } 
-        />
-        <Route 
-          path="/Main"
-          element={ 
+          } />
+
+        
+
+    
+        
+          
+       
+
+
+        <Route
+          path="/documents/*"
+          element={
             <ProtectedRoute>
-              <MainLayout>
-                <DocumentsPage />
-              </MainLayout>
+              <MainLayout />
             </ProtectedRoute>
           }
+<<<<<<< Updated upstream
         />
+=======
+        >
+          <Route index element={<DocumentsPage />} />
+
+          <Route path=":slugAndId" element={<DocumentPage />} />
+        </Route>
+
+ 
+>>>>>>> Stashed changes
         
        <Route path="*" element={<Navigate to="/" replace />} />
-      </Routes>
+    </Routes>
+  </BrowserRouter>
     </>
   );
 } //
 
-export default App; 

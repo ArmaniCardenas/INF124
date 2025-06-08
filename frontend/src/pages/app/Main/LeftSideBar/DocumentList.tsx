@@ -9,6 +9,7 @@ import { keepPreviousData, useQuery, useQueryClient, useMutation } from "@tansta
 import { cn } from "../../../../lib/utils"
 import { Item } from "./Item"
 import { FileIcon } from "lucide-react"
+import { docPath } from "../../../../lib/slug"
 
 
 
@@ -33,8 +34,13 @@ export function DocumentList({ parentDocumentId, level = 0 }: DocumentListProps)
     }))
   }
 
+<<<<<<< Updated upstream
   const onRedirect = (documentId:string) => {
     navigate(`/documents/${documentId}`)
+=======
+  const onRedirect = (doc:Document) => {
+    navigate(docPath(doc.title, doc._id))
+>>>>>>> Stashed changes
   }
   
 
@@ -90,22 +96,23 @@ export function DocumentList({ parentDocumentId, level = 0 }: DocumentListProps)
       </p>
       {children.map(doc => (
         <div key={doc._id}>
-          <Item id={doc._id} onClick={()=>onRedirect(doc._id)}
+          <Item id={doc._id} onClick={()=>onRedirect(doc)}
+            initialData={doc}
             label={doc.title}
             icon={FileIcon}
             level={level}
-            //documentIcon={document.icon}
+            documentIcon={doc.icon}
             active={params.documentId === doc._id}
             expanded ={expanded[doc._id]}
   
-            onCreate={() => {
+            onCreate={(parentId) => {
+              if (parentId === doc._id)
+              {
+                setExpanded(prev => ({ ...prev, [doc._id]: true}))
+              }
 
 
-              createChild.mutate({
-                title: 'Untitled',
-                content: '',
-                parentDocument: doc._id
-              });
+              
             }}
             onExpand={()=> onExpand(doc._id)}
             

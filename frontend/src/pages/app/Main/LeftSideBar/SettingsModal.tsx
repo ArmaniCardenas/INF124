@@ -15,7 +15,7 @@ export function SettingsModal() {
 
   return (
     <Dialog  open={isOpen} onOpenChange={close} modal={false}>
-      <DialogContent>
+      <DialogContent className="bg-white dark:bg-neutral-800 text-black dark:text-white rounded-lg">
         <DialogHeader className="border-b pb-3">
           <h2 className="text-lg font-medium">My settings</h2>
         </DialogHeader>
@@ -29,7 +29,7 @@ export function SettingsModal() {
               Customize how Lotion looks on your device
             </span>
           </div>
-          <ModeToggle />
+          <ModeToggle  />
         </div>
       </DialogContent>
     </Dialog>

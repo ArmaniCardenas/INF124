@@ -8,6 +8,7 @@ import { useAuth } from "../../../../context/AuthContext"
 
 import { useEffect, useState } from "react";
 import { fetchAllDocuments, Document } from "../../../../api/documents";
+import { docPath } from "../../../../lib/slug";
 
 
 interface SearchCommandProps {
@@ -23,7 +24,7 @@ export function SearchCommand( {open, onOpenChange }: SearchCommandProps )
     const [query, setQuery] = useState('');
 
     const { data: docs = [], isLoading } = useQuery<Document[], Error>({
-        queryKey: ['documents'],
+        queryKey: ['documents', 'search'],
         queryFn: fetchAllDocuments,
     })
 
@@ -31,8 +32,8 @@ export function SearchCommand( {open, onOpenChange }: SearchCommandProps )
         d.title.toLowerCase().includes(query.toLowerCase())
     );
 
-     const onSelect = (id:string) => {
-        navigate(`/documents/${id}`);
+     const onSelect = (id:string, title: string) => {
+        navigate(docPath(title, id));
         onOpenChange(false); 
   }
 
@@ -63,14 +64,16 @@ export function SearchCommand( {open, onOpenChange }: SearchCommandProps )
 
 
   return (
-    <CommandDialog  open={open} onOpenChange={onOpenChange} >
-      <CommandInput value={query} onValueChange={setQuery} placeholder={`Search ${user?.username}'s Lotion`}/>
-      <CommandList>
+    <CommandDialog   open={open} onOpenChange={onOpenChange}  >
+      <CommandInput  className="bg-white dark:bg-neutral-800 
+text-black dark:text-white" value={query} onValueChange={setQuery} placeholder={`Search ${user?.username}'s Lotion`}/>
+      <CommandList className="bg-white dark:bg-neutral-800 
+text-black dark:text-white">
         <CommandEmpty> {isLoading ? 'Loading' : 'No results found'}</CommandEmpty>
         <CommandGroup heading='Documents'>
           {results.map(document => (
-            <CommandItem key={document._id} value={`${document._id}-${document.title}`}
-            title={document.title} onSelect={()=> onSelect}>
+            <CommandItem key={document._id} value={`${document._id}`}
+            title={document.title} onSelect={(value)=> onSelect(value, document.title)}>
               {document.icon ? (
                 <p className="mr-2 text-[18px]">
                   {document.icon}

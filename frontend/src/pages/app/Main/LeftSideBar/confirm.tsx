@@ -31,7 +31,7 @@ import {
             <AlertDialogTrigger onClick={e => e.stopPropagation()} asChild>
                 {children}
             </AlertDialogTrigger>
-            <AlertDialogContent onClick={e => e.stopPropagation()} className="bg-white">
+            <AlertDialogContent onClick={e => e.stopPropagation()} className="bg-white dark:bg-neutral-800 text-black dark:text-white rounded-lg">
                 <AlertDialogHeader onClick={e => e.stopPropagation()}>
                     <AlertDialogTitle >
                         Are you sure?

@@ -2,13 +2,16 @@ import axios from './axios'
 
 export interface Document {
   _id: string
-  icon: string; 
+  icon?: string; 
   title: string
   content?: string
   isArchived: boolean
   createdAt: string
   updatedAt: string
+  coverImage?: string; 
   parentDocument?: string
+
+  parentDocumentTitle?: string; 
 }
 
 
@@ -20,11 +23,23 @@ export interface NewDocument {
      
     }
 
+<<<<<<< Updated upstream
+=======
+export const getDocument = async (id: string): Promise<Document> => {
+  const { data } = await axios.get<Document>(`/api/documents/${id}`);
+  return data;
+};
+
+export const fetchDocById = getDocument; 
+
+
+
+>>>>>>> Stashed changes
 export const fetchDocuments = async(
   
   parentDocument?: string
 ): Promise<Document[]> => {
-   console.log("fetchDocuments called with parentDocument=", parentDocument);
+   //console.log("fetchDocuments called with parentDocument=", parentDocument);
 
   const q = parentDocument ? `?parentDocument=${parentDocument}` : ""
   const { data } = await axios.get<Document[]>(`/api/documents${q}`)
@@ -53,4 +68,35 @@ export const deleteDocument  = (id: string) => axios.delete<{message:string}>(`/
 export const fetchAllDocuments = async (): Promise<Document[]> => {
   const {data} = await axios.get<Document[]>('/api/documents');
   return data.filter(d => !d.isArchived); 
+<<<<<<< Updated upstream
 }
+=======
+}
+
+export const shareDocument = (docId: string, userEmail: string, permission: 'viewer' | 'editor') =>
+  axios.post(`/api/documents/${docId}/share`, { userEmail, permission });
+
+export const updateDocument = async (vars: {
+  id: string,
+  title?: string,
+  content?: string
+}): Promise<Document> => {
+  const { data } = await axios.patch<Document>(
+    `/api/documents/${vars.id}`,
+    vars
+  );
+  return data;
+}
+
+export const setDocumentIcon = (id: string, icon: string): Promise<Document> => {
+  return axios
+  .patch<Document>(`/api/documents/${id}/icon`, { icon })
+  .then((res) => res.data); 
+}
+
+export const removeDocumentIcon = (id: string): Promise<Document> => {
+  return axios
+  .delete<Document>(`/api/documents/${id}/icon`)
+  .then((res) => res.data); 
+}
+>>>>>>> Stashed changes

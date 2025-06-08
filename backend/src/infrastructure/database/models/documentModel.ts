@@ -43,6 +43,7 @@ const documentSchema = new mongoose.Schema<Document>({
         default: ""
     },
 
+<<<<<<< Updated upstream
     collaborators: [collaboratorSchema],
    
 
@@ -50,6 +51,20 @@ const documentSchema = new mongoose.Schema<Document>({
         type: Boolean,
         default: false
     },
+=======
+    icon: {
+        type: String,
+        default: ""
+
+    },
+
+    coverImage: {
+        type: String, 
+        default: ""
+
+    },
+
+>>>>>>> Stashed changes
 },
 {timestamps: true}
 

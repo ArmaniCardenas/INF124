@@ -15,10 +15,12 @@ import { useAuth } from "../../../../context/AuthContext"
 import { useMutation, useQueryClient } from "@tanstack/react-query"
 import { ChevronDown, ChevronRight, LucideIcon, MoreHorizontal, Plus, Trash } from "lucide-react"
 import { toast } from "react-toastify"
-import { useNavigate, useParams } from "react-router-dom"
+import { useNavigate, useParams, useLocation } from "react-router-dom"
 
 
-import { archiveDocument,createDocument, Document as Doc} from "../../../../api/documents"
+import { archiveDocument,createDocument, Document} from "../../../../api/documents"
+import { docPath, extractId } from "../../../../lib/slug"
+import { replace } from "lodash"
 
 
 
@@ -35,33 +37,42 @@ interface ItemProps {
   icon:LucideIcon
   onCreate?: (parentId?: string) => void  
   onArchive?: (id: string) => void
+  initialData?: Document; 
 }
 
-export function Item ({id,label,onClick,icon:Icon,active,documentIcon,isSearch,level=0,onExpand,expanded, onCreate, onArchive}:ItemProps) {
+export function Item ({id,label,onClick,icon:Icon,active,documentIcon,isSearch,level=0,onExpand,expanded, onCreate, onArchive, initialData}:ItemProps) {
 
   const {user} = useAuth()
   const navigate = useNavigate()
+  const { pathname } = useLocation()
+  const lastSegment = pathname.split('/').pop() || ''
   const params = useParams<{ documentId?: string }>();  
+  const currentDocId = extractId(lastSegment)
+
   const queryClient = useQueryClient(); 
 
   const create = useMutation({
     mutationFn: createDocument,
-    onSuccess: (doc: Doc) => {
+    onSuccess: (doc: Document) => {
       queryClient.invalidateQueries({ queryKey: ['documents'], exact: false })
-      navigate(`/documents/${doc._id}`)
+      navigate(docPath(doc.title, doc._id))
+      onCreate?.(doc.parentDocument);
     },
   })
+
 
 
   const archive = useMutation({
     mutationFn: archiveDocument,
     onSuccess: (_data, archivedId) => {
-      queryClient.invalidateQueries({ queryKey: ['documents'] })
-      if(params.documentId === archivedId)
-      {
-        navigate('/documents', { replace: true });
 
-      }
+      queryClient.setQueryData<Document[]>(
+        ['documents'],
+        (old) => old?.filter(d => d._id !== archivedId)
+      )
+
+      queryClient.invalidateQueries({ queryKey: ['documents'], exact: false })
+
       
     },
   })
@@ -75,12 +86,43 @@ export function Item ({id,label,onClick,icon:Icon,active,documentIcon,isSearch,l
         success: 'Note moved to trash!',
         error: 'Failed to archive note',
       })
+
+      p.then(() => {
+        console.log('archive.then:', { id , currentDocId})
+        if (currentDocId === id) {
+          if (initialData?.parentDocument) {
+
+            const parent =
+              queryClient.getQueryData<Document>(['document', initialData.parentDocument])
+              ?? queryClient
+                .getQueryData<Document[]>(['documents'])     
+                ?.find(d => d._id === initialData.parentDocument)
+
+            const parentTitle = parent?.title || initialData.parentDocumentTitle || ''
+            
+            navigate(
+              docPath(parentTitle, initialData.parentDocument),
+              { replace: true }
+            )
+          } else {
+            navigate('/documents', { replace: true })
+
+          }
+        }
+      })
+
+      
   }
 
   const handleCreate = (e: React.MouseEvent) => {
     e.stopPropagation()
-    onCreate?.()
-    toast.success('New note created!');
+    const p = create.mutateAsync({ title: 'Untitled', parentDocument: id })
+    toast.promise(p, {
+      success: 'New note created!',
+      error: 'Failed to create note',
+    })
+
+
 
     
     
@@ -125,15 +167,16 @@ return (
       )}
 
       {!!id && (
-        <div className="ml-auto flex items-center gap-x-2">
-          <DropdownMenu>
+        <div className="ml-auto flex items-center gap-x-2 ">
+          <DropdownMenu >
             <DropdownMenuTrigger asChild onClick={(e) => e.stopPropagation()}>
               <div className="opacity-0 group-hover:opacity-100 h-full ml-auto rounded-sm
               hover:bg-neutral-300 dark:hover:bg-neutral-600" role="button">
                 <MoreHorizontal className="w-4 h-4 text-muted-foreground"/>
               </div>
             </DropdownMenuTrigger>
-            <DropdownMenuContent className="w-60" align="start" side="right" forceMount onClick={e => e.stopPropagation()}>
+            <DropdownMenuContent className="w-60 bg-white dark:bg-neutral-800 
+text-black dark:text-white" align="start" side="right" forceMount onClick={e => e.stopPropagation()}>
               <DropdownMenuItem onClick={handleArchive}>
                 <Trash className="w-4 h-4 mr-2"/>
                 Move to Trash

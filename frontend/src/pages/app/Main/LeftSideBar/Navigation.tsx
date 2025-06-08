@@ -19,7 +19,6 @@ import {DocumentList} from "./DocumentList";
 import { Item } from "./Item";
 
 import { cn } from "../../../../lib/utils";
-import Navbar from "../../LandingPage/Navbar";
 import { UserItem } from "./user-items";
 import { toast, ToastContainer } from 'react-toastify';
 import { useMutation, useQueryClient, useQuery } from '@tanstack/react-query';
@@ -27,6 +26,10 @@ import { createDocument, fetchDocuments, NewDocument, Document } from "../../../
 import { useAuth } from "../../../../context/AuthContext";
 import { TrashBox } from "./trash-box";
 import { useSettings } from "./use-settings";
+import { Link } from "react-router-dom";
+import  { docPath } from '../../../../lib/slug'
+import { Navbar } from "../../Document/Navbar";
+
 
 
 export default function Navigation() {
@@ -38,7 +41,7 @@ export default function Navigation() {
   const { open: openSettings } = useSettings();  
 
   const navigate = useNavigate();
-  const params = useParams<{ documentId?: string }>();
+  const params = useParams<{ slugAndId?: string }>()
   const queryClient = useQueryClient(); 
 
   const { data: documents = [], isLoading, isError } = useQuery<Document[], Error>({
@@ -54,6 +57,7 @@ export default function Navigation() {
       onSuccess: (doc) => {
         toast.success(`New note created!`)
         queryClient.invalidateQueries({queryKey: ['documents']})
+        navigate(docPath(doc.title, doc._id))
       },
       onError: () => {
         toast.error("Couldn't create page")
@@ -95,7 +99,7 @@ export default function Navigation() {
     {
         collapse();
     } 
-  }, [params.documentId, isMobile]);
+  }, [params.slugAndId, isMobile]);
 
   const handleMouseDown = (e: React.MouseEvent) => {
     e.preventDefault();
@@ -155,7 +159,7 @@ export default function Navigation() {
       <aside
         ref={sidebarRef}
         className={cn(
-          "group/sidebar h-full bg-secondary relative flex flex-col z-[99999] bg-neutral-100 overflow-y-auto overflow-x-hidden",
+          "group/sidebar h-full bg-secondary dark:text-gray-400 dark:bg-neutral-800 relative flex flex-col z-[99999] bg-neutral-100 overflow-y-auto overflow-x-hidden",
           isResetting && "transition-all ease-in-out duration-300",
           isCollapsed && "w-0",
           !isCollapsed && "w-60"
@@ -173,7 +177,7 @@ export default function Navigation() {
         </div>
         <div>
           <UserItem/>
-          <Item label="Search" icon={Search} isSearch onClick={()=> openSearch()}/>
+          <Item  label="Search" icon={Search} isSearch onClick={()=> openSearch()}/>
           <Item label="Settings" icon={Settings} onClick={openSettings}/>
           <Item
           
@@ -195,7 +199,7 @@ export default function Navigation() {
               <Item label="Trash" icon={Trash}></Item>
             </PopoverTrigger>
             <PopoverContent
-            className="p-0 w-72"
+            className="p-0 w-72  bg-white dark:bg-neutral-800 rounded-md shadow-lg"
             side={isMobile ? 'bottom' :  'right'}>
               <TrashBox/>
 
@@ -222,13 +226,13 @@ export default function Navigation() {
           isCollapsed ? "left-0 w-full" : "left-60 w-[calc(100%-240px)]"
         )}
       >
-        {!!params.documentId ? (
-          <Navbar   />
+        {!!params.slugAndId ? (
+          <Navbar  isCollapsed={isCollapsed} onResetWidth={resetWidth}   />
         ) : (
-          <nav className="w-full flex justify-between">
-            {isCollapsed && (
-              <MenuIcon className="w-6 h-6 text-muted-foreground" onClick={resetWidth} />
-            )}
+          <nav className="w-full px-3 bg-transparent py-2  flex justify-between">
+            {isCollapsed && 
+              <MenuIcon role="button" className="w-6 h-6 text-muted-foreground" onClick={resetWidth} />
+            }
 
             
           </nav>
