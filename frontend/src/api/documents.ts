@@ -23,8 +23,6 @@ export interface NewDocument {
      
     }
 
-<<<<<<< Updated upstream
-=======
 export const getDocument = async (id: string): Promise<Document> => {
   const { data } = await axios.get<Document>(`/api/documents/${id}`);
   return data;
@@ -34,7 +32,6 @@ export const fetchDocById = getDocument;
 
 
 
->>>>>>> Stashed changes
 export const fetchDocuments = async(
   
   parentDocument?: string
@@ -68,9 +65,6 @@ export const deleteDocument  = (id: string) => axios.delete<{message:string}>(`/
 export const fetchAllDocuments = async (): Promise<Document[]> => {
   const {data} = await axios.get<Document[]>('/api/documents');
   return data.filter(d => !d.isArchived); 
-<<<<<<< Updated upstream
-}
-=======
 }
 
 export const shareDocument = (docId: string, userEmail: string, permission: 'viewer' | 'editor') =>
@@ -99,4 +93,3 @@ export const removeDocumentIcon = (id: string): Promise<Document> => {
   .delete<Document>(`/api/documents/${id}/icon`)
   .then((res) => res.data); 
 }
->>>>>>> Stashed changes

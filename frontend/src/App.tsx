@@ -14,14 +14,10 @@ import Signup from './pages/app/SignUp';
 import Home from './pages/app/Home';
 import Profile from './pages/app/Profile';
 import ProtectedRoute from './components/auth/ProtectedRoute';
-<<<<<<< Updated upstream
-// import ProtectedRoute from './components/auth/protectedRoute';
-=======
 //import { MyDocumentsPage } from './pages/app/Document/MyDocumentsPage';
 //import { DocumentEditorPage } from './pages/app/Document/DocumentEditorPage';
 import DocumentPage from './pages/app/Document/DocumentPage';
 import { ToastContainer } from 'react-toastify';
->>>>>>> Stashed changes
 
 
 export default function App() {
@@ -58,9 +54,6 @@ export default function App() {
               <MainLayout />
             </ProtectedRoute>
           }
-<<<<<<< Updated upstream
-        />
-=======
         >
           <Route index element={<DocumentsPage />} />
 
@@ -68,7 +61,6 @@ export default function App() {
         </Route>
 
  
->>>>>>> Stashed changes
         
        <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>

@@ -36,14 +36,7 @@ const documentSchema = new mongoose.Schema<Document>({
         type: String,
         default: ""
     },
- 
-
-    workspaceId: {
-        type: String, 
-        default: ""
-    },
-
-<<<<<<< Updated upstream
+    
     collaborators: [collaboratorSchema],
    
 
@@ -51,7 +44,12 @@ const documentSchema = new mongoose.Schema<Document>({
         type: Boolean,
         default: false
     },
-=======
+
+    workspaceId: {
+        type: String, 
+        default: ""
+    },
+
     icon: {
         type: String,
         default: ""
@@ -64,7 +62,6 @@ const documentSchema = new mongoose.Schema<Document>({
 
     },
 
->>>>>>> Stashed changes
 },
 {timestamps: true}
 

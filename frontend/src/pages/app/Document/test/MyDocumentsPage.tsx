@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
 // import { createDocument, getAllDocuments } from '../../../api/document';
 import { Link } from 'react-router-dom';
-import { fetchAllDocuments } from '../../../api/documents';
-import { Document } from '../../../api/documents';
+import { fetchAllDocuments } from '../../../../api/documents';
+import { Document } from '../../../../api/documents';
 
 export const MyDocumentsPage = () => {
   const [documents, setDocuments] = useState<Document[]>([]);

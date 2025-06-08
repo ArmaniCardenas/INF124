@@ -34,13 +34,8 @@ export function DocumentList({ parentDocumentId, level = 0 }: DocumentListProps)
     }))
   }
 
-<<<<<<< Updated upstream
-  const onRedirect = (documentId:string) => {
-    navigate(`/documents/${documentId}`)
-=======
   const onRedirect = (doc:Document) => {
     navigate(docPath(doc.title, doc._id))
->>>>>>> Stashed changes
   }
   
 

@@ -1,19 +1,17 @@
 import { Request, RequestHandler, Response, NextFunction } from 'express';
 import DocumentModel from '../database/models/documentModel';
+import UserModel from '../database/models/userModel';
 
 
 type AsyncHandler = RequestHandler; 
 
 
 export async function createDocument(req: Request, res: Response) {
-  console.log('▶︎ req.user is:', req.user);
-  const userId = (req.user! as any)._id.toString();
+  // const { userId: userId } = req.user!;
   const doc = await DocumentModel.create({
     title: req.body.title,
-    content: req.body.content,
     parentDocument: req.body.parentDocument ?? '',
-    
-    collaborators: [{ userId, role: 'owner' }],
+    collaborators: [{ userId: req.user, role: 'owner' }],
   });
   res.status(201).json(doc);
 }
@@ -44,19 +42,39 @@ export async function listDocuments(req: Request, res: Response) {
 }
 
 
+export const shareDocument = async (req: Request, res: Response) => {
+  const { userEmail, permission } = req.body;
+  const user = await UserModel.findOne({ email: userEmail });
+  if (!user) {
+    res.status(404).json({ message: 'User not found' });
+    return;
+  }
+
+  const doc = req.document;
+  const existing = await doc.collaborators.find((c: { userId: { toString: () => string; }; }) => c.userId.toString() == user?._id.toString());
+
+  // console.log('param email': userEmail);
+  // console.log('doc email:', doc.collaborators[0].userId)
+  if (existing) {
+    existing.permission = permission;
+  } else {
+    
+    doc.collaborators.push({ userId: user._id, role: permission });
+  }
+  await doc.save();
+  res.status(200).json({ message: 'Document shared successfully', doc });
+};
+
+
 export const listTrashDocuments: AsyncHandler = async (req, res) => {
   const userId = (req.user! as any)._id;
 
   const docs = await DocumentModel.find({
     'collaborators.userId': userId,
     isArchived: true
-<<<<<<< Updated upstream
-  }).select('_id title updatedAt parentDocument')
-=======
   }).select('_id title updatedAt parentDocument icon')
     console.log('docs: ', docs);
 
->>>>>>> Stashed changes
   res.json(docs)
 
 }
@@ -97,21 +115,7 @@ export const deleteDocument: AsyncHandler = async (req, res) =>
 
 
 export async function getDocument(req: Request, res: Response) {
-  const doc = await DocumentModel.findById(req.params.id);
-  if (!doc)
-    {
-        res.sendStatus(404!);
-        return; 
-    } 
-
-  if (!doc.collaborators.some(c => c.userId.toString() === req.user!.id))
-  {
-    res.sendStatus(403);
-    return; 
-
-  }
-    
-  res.json(doc);
+  res.json(req.document);
 }
 
 export async function updateDocument(req: Request, res: Response) {
@@ -159,8 +163,6 @@ async function collectDescendantIds(rootId: string): Promise<string[]>
   return [...direct.map(d=> d._id.toString()), ...nested.flat()];
 }
 
-<<<<<<< Updated upstream
-=======
 export async function updateIcon(req: Request, res: Response)
 {
   const { icon } = req.body;
@@ -178,4 +180,3 @@ export async function removeIcon(req: Request, res: Response)
   await doc.save(); 
   res.json(doc); 
 }
->>>>>>> Stashed changes
