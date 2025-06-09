@@ -4,7 +4,7 @@ export interface Document {
   _id: string
   icon?: string; 
   title: string
-  content?: string
+  content?: any
   isArchived: boolean
   createdAt: string
   updatedAt: string
@@ -17,7 +17,7 @@ export interface Document {
 
 export interface NewDocument {
      title: string; 
-     content?: string;
+     content?: any;
      parentDocument?: string
 
      
@@ -28,8 +28,10 @@ export const getDocument = async (id: string): Promise<Document> => {
   return data;
 };
 
-export const fetchDocById = getDocument; 
-
+export const fetchDocById = async (id: string): Promise<Document> => {
+  const { data } = await axios.get<Document>(`/api/documents/${id}`);
+  return data;
+};
 
 
 export const fetchDocuments = async(
@@ -73,7 +75,7 @@ export const shareDocument = (docId: string, userEmail: string, permission: 'vie
 export const updateDocument = async (vars: {
   id: string,
   title?: string,
-  content?: string
+  content?: any 
 }): Promise<Document> => {
   const { data } = await axios.patch<Document>(
     `/api/documents/${vars.id}`,

@@ -68,7 +68,7 @@ export default function Navigation() {
 
   const handleCreate = () => 
   {
-    createPage.mutate({ title: 'Untitled', content: ''});
+    createPage.mutate({ title: '', content: { type: 'doc', content: [] } });
   }
 
 

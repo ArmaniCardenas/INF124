@@ -51,7 +51,6 @@ export function Navbar({ isCollapsed, onResetWidth }: Props) {
   return (
     <>
     <nav className="bg-background dark:text-white dark:bg-[#1F1F1F] px-3 py-2 w-full">
-      {/* header row: collapse icon + title on the left, menu on the right */}
       <div className="flex items-center justify-between w-full gap-x-4">
         <div className="flex items-center gap-x-4">
           {isCollapsed && (
@@ -68,7 +67,6 @@ export function Navbar({ isCollapsed, onResetWidth }: Props) {
         </div>
       </div>
 
-      {/* banner, full-width, below header row */}
       {documentData.isArchived && (
         <div className="">
           <Banner documentId={documentData._id} />

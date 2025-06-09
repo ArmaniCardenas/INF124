@@ -27,12 +27,12 @@ export function Title({ initialData }: TitleProps) {
   const navigate = useNavigate()
   const queryClient = useQueryClient()
 
-  const [title, setTitle] = useState(initialData.title || 'Untitled')
+  const [title, setTitle] = useState(initialData.title)
   const [isEditing, setIsEditing] = useState(false)
   const inputRef = useRef<HTMLInputElement>(null)
 
   useEffect(() => {
-    setTitle(initialData.title || 'Untitled')
+    setTitle(initialData.title)
   }, [initialData.title])
 
 
@@ -122,6 +122,7 @@ export function Title({ initialData }: TitleProps) {
       {isEditing ? (
         <Input
           ref={inputRef}
+          placeholder='Untitled'
           className="h-7 px-2 focus-visible:ring-transparent"
           value={title}
           onChange={onChange}
@@ -130,12 +131,12 @@ export function Title({ initialData }: TitleProps) {
         />
       ) : (
         <Button
-          className="font-normal h-auto p-1"
+          className={`font-normal h-auto p-1 ${!title && 'text-muted-foreground'}`}
           variant="ghost"
           size="lg"
           onClick={enableInput}
         >
-          <span className="truncate">{title}</span>
+          <span className="truncate">{title || 'Untitled'}</span>
         </Button>
       )}
     </div>

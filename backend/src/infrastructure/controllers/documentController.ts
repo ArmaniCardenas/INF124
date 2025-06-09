@@ -128,7 +128,7 @@ export async function updateDocument(req: Request, res: Response) {
   if (!doc)
     {
        res.sendStatus(404);
-        return;
+       return;
     } 
   res.json(doc);
 }

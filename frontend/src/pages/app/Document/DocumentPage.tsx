@@ -3,11 +3,15 @@ import { useMutation, useQuery }    from '@tanstack/react-query'
 import { fetchDocById, Document, updateDocument } from '../../../api/documents'
 import { extractId } from '../../../lib/slug'
 import { cn } from '../../../lib/utils'
+import { Editor } from './test/Editor'
+import { PageBody } from './PageBody'
+
+
 
 import { Toolbar } from './toolbar'
 
 export default function DocumentPage() {
-  const { slugAndId = '' } = useParams<'slugAndId'>();
+   const { slugAndId = '' } = useParams<'slugAndId'>();
   const id = extractId(slugAndId);
 
 
@@ -26,13 +30,17 @@ export default function DocumentPage() {
     const update = useMutation({
     mutationFn: updateDocument,
     onSuccess: () => {
-      /* nothing else to do here */
     },
   })
 
     const onChange = (content: string) => {
       update.mutate({ id, content })
   }
+
+
+  const handleUpdate = (content: any) => {
+    update.mutate({ id: id, content });
+  };
 
   if (isLoading) return <div className="p-4">Loading…</div>
 
@@ -49,6 +57,7 @@ export default function DocumentPage() {
          >
         <div className='mx-auto px-6 md:px-24 max-w-3xl lg:max-w-4xl'>
           <Toolbar initialData={data}/>
+          <PageBody initialData={data}></PageBody>
           
 
         </div>

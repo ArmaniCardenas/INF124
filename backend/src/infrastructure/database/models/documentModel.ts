@@ -27,9 +27,11 @@ const documentSchema = new mongoose.Schema<Document>({
     },
 
     content: {
-        type: String,
-        default: ""
-    },
+
+         type: mongoose.Schema.Types.Mixed,
+          default: { type: 'doc', content: [] } 
+        },
+        
 
     parentDocument: {
         //type: Types.ObjectId,
