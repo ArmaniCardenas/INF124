@@ -62,3 +62,6 @@ export const fetchAllDocuments = async (): Promise<Document[]> => {
 
 export const shareDocument = (docId: string, userEmail: string, permission: 'viewer' | 'editor') =>
   axios.post(`/api/documents/${docId}/share`, { userEmail, permission });
+
+export const listCollaborators = (docId: string) =>
+  axios.get(`/api/documents/${docId}/collaborators`)

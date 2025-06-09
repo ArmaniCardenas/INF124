@@ -1,6 +1,6 @@
 import { Request, Response, RequestHandler, NextFunction } from 'express';
 import DocumentModel from '../database/models/documentModel';
-import UserModel from '../database/models/userModel';
+import UserModel from '../database/models/userModel'
 type AsyncHandler = RequestHandler; 
 
 
@@ -12,6 +12,34 @@ export async function createDocument(req: Request, res: Response) {
     collaborators: [{ userId: req.user, role: 'owner' }],
   });
   res.status(201).json(doc);
+}
+
+export async function listCollaborators(req: Request, res: Response) {
+  try{
+    // console.log(req.document.collaborators[0].userId.name);
+    const userIds = req.document.collaborators.map(c => c.userId);
+    const users = await UserModel.find({ _id: { $in: userIds } }).select('username email');
+
+
+    const userMap = new Map();
+    users.forEach(u => userMap.set(u._id.toString(), { name: u.username, email: u.email }));
+
+    // Step 4: combine collaborator roles with user info
+    const collaborators = req.document.collaborators.map(c => {
+      const userInfo = userMap.get(c.userId.toString()) || {};
+      return {
+        userId: c.userId.toString(),
+        name: userInfo.name || null,
+        email: userInfo.email || null,
+        role: c.role,
+      };
+    });
+
+    res.status(200).json(collaborators);
+  }catch{
+    console.log('error listing collaborators')
+    res.status(404)
+  }
 }
 
 export async function listDocuments(req: Request, res: Response) {
@@ -75,16 +103,14 @@ export const shareDocument = async (req: Request, res: Response) => {
   const doc = req.document;
   const existing = await doc.collaborators.find(c => c.userId.toString() == user?._id.toString());
 
-  // console.log('param email': userEmail);
-  // console.log('doc email:', doc.collaborators[0].userId)
   if (existing) {
-    existing.permission = permission;
+    existing.role = permission;
   } else {
-    
     doc.collaborators.push({ userId: user._id, role: permission });
   }
   await doc.save();
-  res.status(200).json({ message: 'Document shared successfully', doc });
+
+  res.status(200);
 };
 
 export const listTrashDocuments: AsyncHandler = async (req, res) => {
