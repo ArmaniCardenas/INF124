@@ -55,7 +55,7 @@ export default function DocumentPage() {
 +        "pb-40",
          data.isArchived ? "pt-32 md:pt-36" : "pt-24 md:pt-28" )}
          >
-        <div className='mx-auto px-6 md:px-24 max-w-3xl lg:max-w-4xl'>
+        <div className='mx-auto dark:text-white px-6 md:px-24 max-w-3xl lg:max-w-4xl'>
           <Toolbar initialData={data}/>
           <PageBody initialData={data}></PageBody>
           
