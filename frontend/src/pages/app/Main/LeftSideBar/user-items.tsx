@@ -18,13 +18,13 @@ export const UserItem = () => {
     
     return (
         <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-                <div role="button" className="flex items-center text-sm p-3 w-full  hover:bg-neutral-200 ">
-                    <div className="gap-x-2 flex items-center max-w-[150px] ">
+            <DropdownMenuTrigger asChild className="">
+                <div role="button" className="flex  items-center text-sm p-3 w-full  hover:bg-neutral-200 ">
+                    <div className="gap-x-2  flex items-center max-w-[150px] ">
                         <Avatar className="h-5 w-5">
                             <AvatarImage src="reading.png" />
                         </Avatar>
-                        <span className="text-start font-medium line-clamp-1">
+                        <span className="text-start  font-medium line-clamp-1">
                                 {user?.username}&apos;s Notion
                         </span>
                     </div>
@@ -35,13 +35,13 @@ export const UserItem = () => {
             </DropdownMenuTrigger>
 
             <DropdownMenuContent
-                className="w-80 bg-white p-2"
+                className="w-80 p-2 bg-white dark:bg-neutral-800 text-black dark:text-white "
                 align="start"
                 alignOffset={11}
                 forceMount
             >
 
-                <p className="text-xs font-medium leading-none text-muted-foreground text-black">
+                <p className="text-xs dark:text-white font-medium leading-none text-muted-foreground text-black">
                     {user?.email}
                 </p>
 

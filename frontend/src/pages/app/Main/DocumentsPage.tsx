@@ -50,7 +50,7 @@ export default function DocumentsPage() {
       className='hidden dark:block'>
       </img>
 
-      <h2 className='text-lg font-medium'>
+      <h2 className='text-lg dark:text-white font-medium'>
         Welcome to {user?.username}&apos;s Lotion
       </h2>
       <Button className='bg-black text-white' onClick={handleCreate}>
