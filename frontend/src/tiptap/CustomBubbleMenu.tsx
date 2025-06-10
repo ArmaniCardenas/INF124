@@ -6,7 +6,7 @@ import { ThemeProvider, ThemeContexts } from '../pages/app/LandingPage/ThemeProv
 const buttons = [
   { icon: 'B', action: (e: Editor) => e.chain().focus().toggleBold().run() },
   { icon: 'I', action: (e: Editor) => e.chain().focus().toggleItalic().run() },
-  { icon: 'U', action: (e: Editor) => e.chain().focus().toggleUnderline().run() },
+  // { icon: 'U', action: (e: Editor) => e.chain().focus().toggleUnderline().run() },
   { icon: 'S', action: (e: Editor) => e.chain().focus().toggleStrike().run() },
 ];
 

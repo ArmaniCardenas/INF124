@@ -91,15 +91,15 @@ export const SlashMenuItems: SlashMenuItem[] = [
     shortcut: "- L",
     desc: "Create a simple bulleted list.",
   },
-  {
-    title: "Task List.",
-    command: ({ editor, range }) => {
-      editor.chain().focus().deleteRange(range).toggleTaskList().run();
-    },
-    //img: toDoImg,
-    shortcut: "- TL",
-    desc: "Track tasks with a to-do list.",
-  },
+  // {
+  //   title: "Task List.",
+  //   command: ({ editor, range }) => {
+  //     // editor.chain().focus().deleteRange(range).toggleTaskList().run();
+  //   },
+  //   //img: toDoImg,
+  //   shortcut: "- TL",
+  //   desc: "Track tasks with a to-do list.",
+  // },
   {
     title: "Block Quote",
     command: ({ editor, range }) => {
