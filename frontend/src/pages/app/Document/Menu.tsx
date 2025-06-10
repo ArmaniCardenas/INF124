@@ -5,6 +5,8 @@ import { useMutation, useQueryClient } from "@tanstack/react-query"
 import { toast } from "react-toastify"
 import { MoreHorizontal, Trash } from "lucide-react"
 
+import { ShareModal } from "./ShareModal"
+
 
 
 import {DropdownMenu,DropdownMenuTrigger,
@@ -17,6 +19,7 @@ import { Skeleton } from "../../../components/ui/skeleton"
 import { useAuth } from "../../../context/AuthContext"
 import { archiveDocument } from "../../../api/documents"
 import { docPath } from "../../../lib/slug"
+import { useState } from "react"
 	
 
 interface MenuProps {
@@ -25,7 +28,7 @@ interface MenuProps {
 }
 
 export function Menu ({documentId, initialData}:MenuProps) {
-
+  const [showShare, setShowShare] = useState(false);
   const navigate = useNavigate();
   const {user} = useAuth(); 
   const queryClient = useQueryClient(); 
@@ -63,24 +66,45 @@ export function Menu ({documentId, initialData}:MenuProps) {
 
 
   return (
-    <DropdownMenu >
-      <DropdownMenuTrigger asChild>
-        <Button size='sm' variant='ghost'>
-          <MoreHorizontal className="w-4 h-4"/>
-        </Button>
-      </DropdownMenuTrigger>
-      <DropdownMenuContent className="w-60 bg-white dark:bg-neutral-800 
-text-black dark:text-white" align="end" alignOffset={8} forceMount>
-        <DropdownMenuItem onClick={onArchive}>
-          <Trash className="w-4 h-4 mr-2"/>
-          Delete
-        </DropdownMenuItem>
-        <DropdownMenuSeparator/>
-        <div className="text-xs text-muted-foreground p-2">
-          Last edited by: {user?.username}
-        </div>
-      </DropdownMenuContent>
-    </DropdownMenu>
+    <>
+      <DropdownMenu>
+        <DropdownMenuTrigger asChild>
+          <Button size="sm" variant="ghost">
+            <MoreHorizontal className="w-4 h-4" />
+          </Button>
+        </DropdownMenuTrigger>
+
+        <DropdownMenuContent
+          className="w-60 bg-white dark:bg-neutral-800 text-black dark:text-white"
+          align="end"
+          alignOffset={8}
+          forceMount
+        >
+          <DropdownMenuItem onClick={onArchive}>
+            <Trash className="w-4 h-4 mr-2" />
+            Delete
+          </DropdownMenuItem>
+
+          <DropdownMenuItem onClick={() => setShowShare(true)}>
+            Share
+          </DropdownMenuItem>
+
+          <DropdownMenuSeparator />
+
+          <div className="text-xs text-muted-foreground p-2">
+            Last edited by: {user?.username}
+          </div>
+        </DropdownMenuContent>
+      </DropdownMenu>
+
+      {/* ← Render the ShareModal here */}
+      {showShare && (
+        <ShareModal
+          docId={documentId}
+          onClose={() => setShowShare(false)}
+        />
+      )}
+    </>
   )
 }
 

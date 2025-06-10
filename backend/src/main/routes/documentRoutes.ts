@@ -22,6 +22,5 @@ router
   .post("/:id/share",  authorizeDocAccess('owner'),  ctrl.shareDocument)
   .patch("/:id/restore", ctrl.restoreDocument)
   .patch("/:id/archive", ctrl.archiveDocument);
-  .patch("/:id/archive", ctrl.archiveDocument);
 
 export default router;  
