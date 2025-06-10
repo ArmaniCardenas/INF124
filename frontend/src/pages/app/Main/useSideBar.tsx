@@ -1,4 +1,3 @@
-// src/hooks/useSidebar.ts
 import { useEffect, useRef, useState } from 'react';
 
 export function useSidebar(
@@ -14,7 +13,6 @@ export function useSidebar(
   const [collapsed, setCollapsed] = useState(false);
   const [animating, setAnimating] = useState(false);
 
-  // Drag handlers
   useEffect(() => {
     function onMouseMove(e: MouseEvent) {
       if (!isResizing.current) return;
