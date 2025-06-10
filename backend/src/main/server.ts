@@ -6,7 +6,6 @@ import dotenv from 'dotenv';
 import authRoutes from '../infrastructure/controllers/authController';
 import profileRoutes from './routes/profileRoutes'
 import documentRoutes from './routes/documentRoutes'
-import profileRoutes from './routes/profileRoutes'
 import mongoose from 'mongoose';
 import cookieParser from 'cookie-parser';
 import { registerDocumentSocket } from '../infrastructure/sockets/document';
@@ -41,7 +40,7 @@ server.listen(PORT, () => {
 
 app.use(
   cors({
-    origin: ["http://localhost:5173"],
+    origin: [process.env.FRONTEND_URL || "http://localhost:5173"],
     methods: ["GET", "POST", "PUT", "PATCH" ,"DELETE", "OPTIONS"],
     credentials: true,
   })
