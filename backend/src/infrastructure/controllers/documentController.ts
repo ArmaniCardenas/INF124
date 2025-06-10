@@ -16,6 +16,35 @@ export async function createDocument(req: Request, res: Response) {
   res.status(201).json(doc);
 }
 
+export async function listCollaborators(req: Request, res: Response) {
+  try{
+    // console.log(req.document.collaborators[0].userId.name);
+    const userIds = req.document.collaborators.map(c => c.userId);
+    const users = await UserModel.find({ _id: { $in: userIds } }).select('username email');
+
+
+    const userMap = new Map();
+    users.forEach(u => userMap.set(u._id.toString(), { name: u.username, email: u.email }));
+
+    // Step 4: combine collaborator roles with user info
+    const collaborators = req.document.collaborators.map(c => {
+      const userInfo = userMap.get(c.userId.toString()) || {};
+      return {
+        userId: c.userId.toString(),
+        name: userInfo.name || null,
+        email: userInfo.email || null,
+        role: c.role,
+      };
+    });
+
+    res.status(200).json(collaborators);
+  }catch{
+    console.log('error listing collaborators')
+    res.status(404)
+  }
+}
+
+
 export async function listDocuments(req: Request, res: Response) {
   const userId = (req.user! as any)._id;
   const parent = req.query.parentDocument as string | undefined;

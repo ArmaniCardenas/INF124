@@ -69,4 +69,5 @@ const documentSchema = new mongoose.Schema<Document>({
 
 );
 
+
 export default model<Document>('Document', documentSchema);
