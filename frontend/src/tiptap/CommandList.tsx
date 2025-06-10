@@ -71,8 +71,9 @@ export const CommandList = React.forwardRef(
               className={`flex items-center p-2 rounded cursor-pointer ${hoverBg} ${idx === selectedIndex ? selectedBg : ''}`} 
               onMouseEnter={() => setSelectedIndex(idx)}
               onClick={() => command(item)}>
-              <img src={item.img} alt={item.title} className="w-8 h-8 rounded border" />
-              <div className="ml-2 flex-1">
+              {item.img && (
+              <img src={item.img!} alt={item.title} className="w-8 h-8 rounded border" />
+              )}              <div className="ml-2 flex-1">
                 <div className={`text-sm font-medium ${textPrimary}`}>{item.title}</div>
                 <div className={`text-xs ${textSecondary}`}>{item.desc}</div>
               </div>

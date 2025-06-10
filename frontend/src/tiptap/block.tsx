@@ -1,11 +1,20 @@
-import { Node, mergeAttributes } from '@tiptap/core'
+import { Node, mergeAttributes, CommandProps } from '@tiptap/core'
 import {
   ReactNodeViewRenderer,
   NodeViewWrapper,
   NodeViewContent,
   NodeViewProps,
 } from '@tiptap/react'
-import { PlusCircle, GripVertical } from 'lucide-react'
+import { PlusCircle, GripVertical, Plus } from 'lucide-react'
+
+// 1a) Tell Tiptap about your custom command:
+declare module '@tiptap/core' {
+  interface Commands<ReturnType> {
+    dBlock: {
+      setDBlock: () => ReturnType
+    }
+  }
+}
 
 export const DBlock = Node.create({
   name: 'dBlock',
@@ -21,6 +30,7 @@ export const DBlock = Node.create({
     0,
   ],
 
+  // 1b) Now your setDBlock command is properly typed:
   addCommands() {
     return {
       setDBlock:
@@ -37,50 +47,13 @@ export const DBlock = Node.create({
     }
   },
 
-  addKeyboardShortcuts() {
-    return {
-      'Mod-Alt-0': () => this.editor.commands.setDBlock(),
-
-      Enter: ({ editor }) => {
-        const { state } = editor
-        const { $head, from } = state.selection
-        const parent = $head.node($head.depth - 1)
-
-        if (parent.type.name !== this.name) {
-          return false
-        }
-
-        let endPos = -1
-        state.doc.descendants((node, pos) => {
-          if (node.type.name === this.name && pos > from) {
-            endPos = pos
-            return false
-          }
-          return
-        })
-
-        if (endPos < 0) return false
-
-        const slice = state.doc.slice(from, endPos).content.toJSON().content
-        return editor
-          .chain()
-          .deleteRange({ from, to: endPos })
-          .insertContentAt(from, {
-            type: this.name,
-            content: slice,
-          })
-          .focus(from + 2)
-          .run()
-      },
-    }
-  },
-
   addNodeView() {
     return ReactNodeViewRenderer(DBlockView)
   },
 })
 
-function DBlockView({ node, getPos, editor }: NodeViewProps) {
+// 1c) Export your view so getExtensions can import it:
+export function DBlockView({ node, getPos, editor }: NodeViewProps) {
   const insertBelow = () => {
     const pos = (getPos() as number) + node.nodeSize
     editor
@@ -96,16 +69,16 @@ function DBlockView({ node, getPos, editor }: NodeViewProps) {
         onClick={insertBelow}
         className="absolute left-0 top-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-100 cursor-pointer p-1"
       >
-        <PlusCircle className="w-4 h-4 text-gray-400 hover:text-gray-600" />
+        <Plus className="w-4 h-4 text-gray-400 hover:text-gray-600" />
       </div>
 
       <div
         data-drag-handle
         className="absolute left-6 top-1/2 -translate-y-1/2 flex flex-col gap-0.5 opacity-0 group-hover:opacity-100 cursor-grab"
       >
-        {[...Array(6)].map((_, i) => (
-          <GripVertical key={i} className="w-3 h-3 text-gray-400" />
-        ))}
+       
+          <GripVertical  className="w-3 h-3 text-gray-400" />
+       
       </div>
 
       <NodeViewContent className="ml-14 w-full" />

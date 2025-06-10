@@ -4,14 +4,15 @@ import fuzzysort from "fuzzysort";
 import tippy from "tippy.js";
 import { CommandList } from "./CommandList";
 
-interface SlashMenuItem {
-  title: string;
-  command: (params: { editor: Editor; range: Range }) => void;
-  img: string;
-  shortcut: string;
-  type: string;
-  desc: string;
+export interface SlashMenuItem {
+  title: string
+  command: (params: { editor: Editor; range: Range }) => void
+  img?: string
+  shortcut?: string
+  desc?: string
 }
+
+
 
  const stopPrevent = <T extends Event>(e: T): T => {
   (e as Event).stopPropagation();
@@ -20,7 +21,7 @@ interface SlashMenuItem {
   return e;
 };
 
-const SlashMenuItems: Partial<SlashMenuItem>[] = [
+export const SlashMenuItems: SlashMenuItem[] = [
   {
     title: "Text",
     command: ({ editor, range }) => {
@@ -210,6 +211,23 @@ const SlashMenuItems: Partial<SlashMenuItem>[] = [
     desc: "Create 4 columns of blocks.",
     shortcut: "- FC",
   },
+
+
+  {
+  title: 'DBlock',
+  command: ({ editor, range }) => {
+    editor
+      .chain()
+      .focus()
+      .deleteRange(range)
+      .setDBlock()
+      .run()
+  },
+  shortcut: '/0',
+  desc: 'Wrap this block so you can drag it',
+},
+
+
 ];
 
 export const suggestion = {
@@ -226,7 +244,7 @@ export const suggestion = {
       .go(query, SlashMenuItems, { key: "title" })
       .map((item) => ({
         ...item,
-        highlightedTitle: fuzzysort.highlight(item, "<b>", "</b>"),
+        highlightedTitle: (Highlight as any)(item, '<b>', '</b>'),
       }));
 
     return fuzzyResults.map(({ obj, highlightedTitle }) => ({
