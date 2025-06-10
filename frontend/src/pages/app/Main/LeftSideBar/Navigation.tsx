@@ -68,7 +68,7 @@ export default function Navigation() {
 
   const handleCreate = () => 
   {
-    createPage.mutate({ title: '', content: { type: 'doc', content: [] } });
+    createPage.mutate({ title: 'Untitled', content: ''});
   }
 
 
@@ -175,10 +175,11 @@ export default function Navigation() {
         >
           <ChevronsLeft className="w-6 h-6" />
         </div>
-
-        <UserItem/>
-        <div className="mt-4">
-            Documents
+        <div>
+          <UserItem/>
+          <Item  label="Search" icon={Search} isSearch onClick={()=> openSearch()}/>
+          <Item label="Settings" icon={Settings} onClick={openSettings}/>
+          <Item
           
             onClick={handleCreate}
             label="New Page"
