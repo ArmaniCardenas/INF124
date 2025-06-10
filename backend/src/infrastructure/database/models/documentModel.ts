@@ -12,7 +12,7 @@ const collaboratorSchema = new mongoose.Schema({
     role: {
         type: String,
         enum: ['owner', 'editor', 'viewer'], 
-        default: 'edtior'
+        default: 'editor'
         }
 
     },
@@ -27,8 +27,24 @@ const documentSchema = new mongoose.Schema<Document>({
     },
 
     content: {
+
+         type: mongoose.Schema.Types.Mixed,
+          default: { type: 'doc', content: [] } 
+        },
+        
+
+    parentDocument: {
+        //type: Types.ObjectId,
         type: String,
         default: ""
+    },
+    
+    collaborators: [collaboratorSchema],
+   
+
+    isArchived: {
+        type: Boolean,
+        default: false
     },
 
     workspaceId: {
@@ -36,12 +52,18 @@ const documentSchema = new mongoose.Schema<Document>({
         default: ""
     },
 
-    collaborators: [collaboratorSchema],
+    icon: {
+        type: String,
+        default: ""
 
-    isArchived: {
-        type: Boolean,
-        default: false
     },
+
+    coverImage: {
+        type: String, 
+        default: ""
+
+    },
+
 },
 {timestamps: true}
 

@@ -21,7 +21,7 @@ export const Heading = () => {
                 Lotion is the connected workspace where <br/>
                 better, faster work happens. 
             </h3>
-            <Button className="bg-black text-white" onClick={() => navigate(user ? "/Main" : "/login")}>
+            <Button className="bg-black text-white" onClick={() => navigate(user ? "/documents" : "/login")}>
                 Enter Lotion
                 <ChevronRight className="h-4 w-4 ml-2"/>
             </Button>

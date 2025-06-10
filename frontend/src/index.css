@@ -10,6 +10,44 @@ body,
 }
 
 @layer base {
+
+  .ProseMirror {
+    outline: none;
+    border: none;
+  }
+
+  .ProseMirror h1 {
+  @apply text-3xl font-semibold mt-4 mb-2;
+  }
+  .ProseMirror h2 {
+    @apply text-2xl font-semibold mt-3 mb-1.5;
+  }
+  .ProseMirror h3 {
+    @apply text-xl font-semibold mt-2 mb-1;
+  }
+
+  .ProseMirror ul {
+  @apply list-disc pl-6 mb-4;
+}
+.ProseMirror ol {
+  @apply list-decimal pl-6 mb-4;
+}
+
+/* blockquote */
+.ProseMirror blockquote {
+  @apply border-l-4 border-gray-300 italic pl-4 my-4;
+}
+
+/* inline code */
+.ProseMirror code {
+  @apply bg-gray-100 rounded px-1 text-sm font-mono;
+}
+
+/* code blocks */
+.ProseMirror pre {
+  @apply bg-gray-900 text-white p-4 rounded overflow-auto mb-4;
+}
+
   :root {
     --background: 0 0% 100%;
     --foreground: 0 0% 3.9%;
@@ -40,11 +78,12 @@ body,
     --ring: 0 0% 3.9%;
  
     --radius: 0.5rem;
+    
   }
  
   .dark {
     --background: 0 0% 3.9%;
-    --foreground: 0 0% 98%;
+    --foreground: 0 0% 94%;
  
     --card: 0 0% 3.9%;
     --card-foreground: 0 0% 98%;
@@ -71,7 +110,6 @@ body,
     --input: 0 0% 14.9%;
     --ring: 0 0% 83.1%;
 
-     @apply text-white;
   }
 }
  

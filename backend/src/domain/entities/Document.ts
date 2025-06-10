@@ -1,3 +1,5 @@
+import { Types } from "mongoose";
+
 export interface Collaborator {
     userId: string; 
     role: "owner" | "editor" | "viewer";
@@ -5,12 +7,16 @@ export interface Collaborator {
 }
 
 export interface Document {
-    _id?: string; 
+    _id: string; 
     title: string; 
-    content: string; 
+    content?: Object; 
+    parentDocument: string; //Types.ObjectId
     workspaceId: string; 
     collaborators: Collaborator[]; 
     isArchived: boolean; 
     createdAt?: Date; 
     updatedAt?: Date; 
+    icon: String; 
+    isPublished: boolean; 
+    coverImage?: string; 
 }

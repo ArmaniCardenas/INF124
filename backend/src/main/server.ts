@@ -4,8 +4,12 @@ import { Server as SocketIOServer } from 'socket.io';
 import cors from 'cors';
 import dotenv from 'dotenv';
 import authRoutes from '../infrastructure/controllers/authController';
-import documentRoutes from './routes/documentRoutes'
 import profileRoutes from './routes/profileRoutes'
+import documentRoutes from './routes/documentRoutes'
+
+
+
+
 import mongoose from 'mongoose';
 import cookieParser from 'cookie-parser';
 
@@ -49,14 +53,18 @@ server.listen(PORT, () => {
 app.use(
   cors({
     origin: ["http://localhost:5173"],
-    methods: ["GET", "POST", "PUT", "DELETE", "PATCH"],
+    methods: ["GET", "POST", "PUT", "PATCH" ,"DELETE", "OPTIONS"],
     credentials: true,
   })
 );
-app.use(cookieParser());
 
 // app.use(cors());
 app.use(express.json());
+app.use(cookieParser());
+
+
+app.use('/api/documents', documentRoutes);
+
 
 app.use('/api/documents', documentRoutes);
 app.use('/profile', profileRoutes);

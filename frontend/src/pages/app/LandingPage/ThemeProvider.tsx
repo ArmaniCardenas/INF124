@@ -10,6 +10,15 @@ interface ThemeContextType {
 
 const ThemeContext = createContext<ThemeContextType|undefined>(undefined)
 
+export const ThemeContexts = createContext<{
+  theme: 'light' | 'dark';
+  toggle: () => void;
+}>({
+  theme: 'light',
+  toggle: () => {},
+});
+
+
 export function ThemeProvider({
   children,
   defaultTheme = "system",
